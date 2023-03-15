@@ -7,10 +7,11 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
+//comment
 
 import com.example.final_project.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity {
+public class KittensActivity extends AppCompatActivity {
     Bitmap bitmap;
     ImageView image;
     ActivityMainBinding binding;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         //Mars button
         Button marsButton = binding.marsButton;
         marsButton.setOnClickListener( marsClk -> {
-            Intent nextPage = new Intent(MainActivity.this, MarsActivity.class);
+            Intent nextPage = new Intent(KittensActivity.this, MarsActivity.class);
             startActivity(nextPage);
         });
 
