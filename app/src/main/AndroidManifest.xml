@@ -16,7 +16,7 @@
             android:name=".MarsActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".KittensActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
