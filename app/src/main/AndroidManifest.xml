@@ -12,8 +12,13 @@
         android:theme="@style/Theme.Final_Project"
         tools:targetApi="31">
         <activity
-            android:name=".Weather_Stack"
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
             android:name=".MarsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Weather_Stack"
             android:exported="false" />
         <activity
             android:name=".KittensActivity"
