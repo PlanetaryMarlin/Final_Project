@@ -50,6 +50,10 @@ public class MarsActivity extends AppCompatActivity {
 
             results.add(binding.editTextDateNumber.getText().toString());
             adapter.notifyItemInserted(results.size()-1);
+
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putInt("marsDate", Integer.parseInt(binding.editTextDateNumber.getText().toString()));
+            editor.apply();
         });
 
         binding.recyclerView.setAdapter(adapter = new RecyclerView.Adapter() {
