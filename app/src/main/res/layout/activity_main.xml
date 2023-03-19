@@ -10,11 +10,20 @@
         android:id="@+id/marsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="64dp"
         android:text="Mars"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/nasaImage" />
+
+    <ImageView
+        android:id="@+id/nasaImage"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="@+id/marsButton"
+        app:layout_constraintStart_toStartOf="@+id/marsButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/nasalogo" />
 
     <Button
         android:id="@+id/weatherButton"
