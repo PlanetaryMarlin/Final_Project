@@ -4,17 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.final_project.databinding.ActivityMainBinding;
 
-import java.io.IOException;
-import java.io.InputStream;
 public class MainActivity extends AppCompatActivity {
     Bitmap bitmap;
     ImageView image;
@@ -48,6 +43,4 @@ public class MainActivity extends AppCompatActivity {
             startActivity(nextPage);
         });
 
-
-    }
 }
