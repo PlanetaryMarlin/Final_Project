@@ -2,70 +2,62 @@ package com.example.final_project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-//comment
+import java.io.IOException;
+import java.io.InputStream;
 
-import com.example.final_project.databinding.ActivityMainBinding;
 
 public class KittensActivity extends AppCompatActivity {
-    Bitmap bitmap;
+    String widthInput;
+    String heightInput;
+    String urlKitten = String.format("https://placekitten.com/%s/%s",widthInput,heightInput);
     ImageView image;
-    ActivityMainBinding binding;
-
+    Button button;
+    ProgressDialog mProgressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        //Mars button
-        Button marsButton = binding.marsButton;
-        marsButton.setOnClickListener( marsClk -> {
-            Intent nextPage = new Intent(KittensActivity.this, MarsActivity.class);
-            startActivity(nextPage);
-        });
-
-        /*
-        image = findViewById(R.id.iMageView);
-        new GetImageFromUrl(image).execute(urlKitten);
+        setContentView(R.layout.activity_kittens);
+        image = findViewById(R.id.imageView);
         EditText widthEditText = findViewById(R.id.widthEditText);
         EditText heightEditText= findViewById(R.id.heightEditText);
-        Button logInButton = findViewById(R.id.logInButton);
-        logInButton.setOnClickListener(clk -> {
-            String widthInput = widthEditText.getText().toString();
-            String heightInput = heightEditText.getText().toString();
-            String urlKitten = String.format("https://placekitten.com/%s/%s",widthInput,heightInput);
+
+        Button button = findViewById(R.id.button);
+
+        button.setOnClickListener(clk -> {
+            widthInput = widthEditText.getText().toString();
+            heightInput = heightEditText.getText().toString();
+            urlKitten = String.format("https://placekitten.com/%s/%s",widthInput,heightInput);
+            new DownloadImage().execute(urlKitten);
 
         });
     }
-    public class GetImageFromUrl extends AsyncTask<String, Void, Bitmap>{
-        ImageView imageView;
-        public GetImageFromUrl(ImageView img){
-            this.imageView = img;
-        }
+    private class DownloadImage extends AsyncTask {
         @Override
-        protected Bitmap doInBackground(String... url) {
-            String stringUrl = url[0];
-            bitmap = null;
-            InputStream inputStream;
+        protected Bitmap doInBackground(Object[] URL) {
+            String imageURL = (String)  URL[0];
+            Bitmap bitmap = null;
             try {
-                inputStream = new java.net.URL(stringUrl).openStream();
-                bitmap = BitmapFactory.decodeStream(inputStream);
-            } catch (IOException e) {
+                // Download Image from URL
+                InputStream input = new java.net.URL(imageURL).openStream();
+                // Decode Bitmap
+                bitmap = BitmapFactory.decodeStream(input);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            return bitmap;
+            return bitmap;        }
+
+
+        protected void onPostExecute(Bitmap result) {
+            // Set the bitmap into ImageView
+            image.setImageBitmap(result);
         }
-        @Override
-        protected void onPostExecute(Bitmap bitmap){
-            super.onPostExecute(bitmap);
-            imageView.setImageBitmap(bitmap);
-        }
-        */
     }
 }
