@@ -24,24 +24,26 @@ public class MainActivity extends AppCompatActivity {
 
         //Mars button
         Button marsButton = binding.marsButton;
-        marsButton.setOnClickListener( marsClk -> {
+        marsButton.setOnClickListener(marsClk -> {
             Intent nextPage = new Intent(MainActivity.this, MarsActivity.class);
             startActivity(nextPage);
         });
 
         //Weather button
         Button weatherButton = binding.weatherButton;
-        weatherButton.setOnClickListener( weatherClk -> {
+        weatherButton.setOnClickListener(weatherClk -> {
             Intent nextPage = new Intent(MainActivity.this, Weather_Stack.class);
             startActivity(nextPage);
         });
 
         //Kittens button
         Button kittensButton = binding.kittensButton;
-        kittensButton.setOnClickListener( kittensClk -> {
+        kittensButton.setOnClickListener(kittensClk -> {
             Intent nextPage = new Intent(MainActivity.this, KittensActivity.class);
             startActivity(nextPage);
         });
 
+
 }
+
 }
