@@ -42,5 +42,5 @@ public class MainActivity extends AppCompatActivity {
             Intent nextPage = new Intent(MainActivity.this, KittensActivity.class);
             startActivity(nextPage);
         });
-    }
+
 }
