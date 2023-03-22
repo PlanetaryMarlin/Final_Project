@@ -14,10 +14,9 @@
         android:text="Enter Location Name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.35"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.932" />
+        app:layout_constraintVertical_bias="0.792" />
 
     <EditText
         android:id="@+id/locationName"
@@ -29,18 +28,20 @@
         android:text="Name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.079"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textLocation"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.04" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView2"
-        android:layout_width="409dp"
-        android:layout_height="652dp"
+        android:id="@+id/recycle"
+        android:layout_width="403dp"
+        android:layout_height="552dp"
         android:layout_marginBottom="1dp"
         app:layout_constraintBottom_toTopOf="@+id/textLocation"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/search"
@@ -50,8 +51,21 @@
         android:text="Search"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.972"
-        app:layout_constraintStart_toEndOf="@+id/locationName"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView2"
-        app:layout_constraintVertical_bias="0.727" />
+        app:layout_constraintHorizontal_bias="0.127"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.945" />
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="113dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:text="Save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.872"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.945" />
 </androidx.constraintlayout.widget.ConstraintLayout>
