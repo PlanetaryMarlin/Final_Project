@@ -48,7 +48,7 @@ public class MarsActivity extends AppCompatActivity {
                 startActivity(nextPage);
                 break;
             case R.id.NYItem:
-//                nextPage = new Intent(MarsActivity.this)
+//                nextPage = new Intent(MarsActivity.this,)
 //                startActivity(nextPage);
                 break;
         }
@@ -73,6 +73,7 @@ public class MarsActivity extends AppCompatActivity {
         EditText editTextDateNumber = binding.editTextDateNumber;
         Button searchButton = binding.searchButton;
         setSupportActionBar(binding.toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         SharedPreferences prefs = getSharedPreferences("MarsData", Context.MODE_PRIVATE);
         int marsInput = prefs.getInt("marsDate", 0);

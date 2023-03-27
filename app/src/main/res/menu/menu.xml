@@ -18,4 +18,7 @@
         android:id="@+id/NYItem"
         android:title="NYT"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/helpItem"
+        android:title="Help" />
 </menu>
