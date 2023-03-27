@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -30,6 +32,37 @@ public class MarsActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
 
     @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId()){
+            case R.id.marsItem:
+                Toast menuToast = Toast.makeText(getApplicationContext(), "Already in Mars", Toast.LENGTH_SHORT);
+                menuToast.show();
+                break;
+            case R.id.weatherItem:
+                Intent nextPage = new Intent(MarsActivity.this, Weather_Stack.class);
+                startActivity(nextPage);
+                break;
+            case R.id.kittensItem:
+                nextPage = new Intent(MarsActivity.this, KittensActivity.class);
+                startActivity(nextPage);
+                break;
+            case R.id.NYItem:
+//                nextPage = new Intent(MarsActivity.this,)
+//                startActivity(nextPage);
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -39,6 +72,8 @@ public class MarsActivity extends AppCompatActivity {
 
         EditText editTextDateNumber = binding.editTextDateNumber;
         Button searchButton = binding.searchButton;
+        setSupportActionBar(binding.toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         SharedPreferences prefs = getSharedPreferences("MarsData", Context.MODE_PRIVATE);
         int marsInput = prefs.getInt("marsDate", 0);
