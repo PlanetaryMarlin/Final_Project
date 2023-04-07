@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,6 +24,9 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.final_project.Mars.*;
@@ -34,8 +38,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class MarsActivity extends AppCompatActivity {
@@ -93,30 +95,42 @@ public class MarsActivity extends AppCompatActivity {
         int marsInput = prefs.getInt("marsDate", 0);
         editTextDateNumber.setText(String.valueOf(marsInput));
 
-        RequestQueue queue = Volley.newRequestQueue(this);
+        RequestQueue queue = Volley.newRequestQueue(this, new HurlStack());
         searchButton.setOnClickListener( clk -> {
                 date = binding.editTextDateNumber.getText().toString();
                 url = "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol="
                         + date
                         + "&api_key=C2gMbD7QTse7kTcfGcL5RlvbIsbBGd47ONCACTiG";
             System.out.println(url);
+
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                     response -> {
                         try {
                             JSONArray photoArray = response.getJSONArray("photos");
 
                             for (int i=0; i < photoArray.length()-1; i++){
+
                                 JSONObject currentResult = photoArray.getJSONObject(i);
                                 JSONObject currentCamera = currentResult.getJSONObject("camera");
                                 JSONObject currentRover = currentResult.getJSONObject("rover");
 
-                                String imgSrc = currentResult.getString("img_src");
+                                String imgSrc = currentResult.getString("img_src").replace("http://mars.jpl", "https://mars");;
                                 String camName = currentCamera.getString("name");
                                 String roverName = currentRover.getString("name");
-
                                 MarsResult result = new MarsResult(imgSrc, camName, roverName);
-                                results.add(result);
-                                adapter.notifyItemInserted(results.size()-1);
+                                System.out.println(imgSrc);
+                                ImageRequest imgReq = new ImageRequest(imgSrc, new Response.Listener<Bitmap>() {
+                                    @Override
+                                    public void onResponse(Bitmap bitmap) {
+                                        result.setBitmap(bitmap);
+                                        results.add(result);
+                                        System.out.println(results);
+                                        adapter.notifyItemInserted(results.size()-1);
+                                    }
+                                }, 1024, 1024, ImageView.ScaleType.CENTER, null,
+                                        error  -> {
+                                        });
+                                queue.add(imgReq);
                             }
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
@@ -126,6 +140,7 @@ public class MarsActivity extends AppCompatActivity {
 
                     });
             queue.add(request);
+
 //            Toast toast = Toast.makeText(getApplicationContext(), "toast text", Toast.LENGTH_SHORT);
 //            toast.show();
 
@@ -146,12 +161,7 @@ public class MarsActivity extends AppCompatActivity {
             public void onBindViewHolder(@NonNull ResultHolder holder, int position) {
                 MarsResult obj = results.get(position);
                 holder.roverText.setText(obj.getRoverName());
-                try {
-                    URL imageURL = new URL(obj.getImgSrc());
-                } catch (MalformedURLException e) {
-                    throw new RuntimeException(e);
-                }
-                holder.thumbnail.set
+                holder.thumbnail.setImageBitmap(obj.getBitmap());
             }
 
             @Override
@@ -171,6 +181,7 @@ public class MarsActivity extends AppCompatActivity {
         ImageView thumbnail;
         public ResultHolder(View itemView){
             super(itemView);
+            thumbnail = itemView.findViewById(R.id.roverImage);
 
             itemView.setOnClickListener(clk -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MarsActivity.this);

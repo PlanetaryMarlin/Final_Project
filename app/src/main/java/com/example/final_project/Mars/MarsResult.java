@@ -1,8 +1,12 @@
 package com.example.final_project.Mars;
+
+import android.graphics.Bitmap;
+
 public class MarsResult {
     protected String imgSrc;
     protected String camName;
     protected String roverName;
+    protected Bitmap bitmap;
 
     public MarsResult(String imgSrc, String camName, String roverName){
         this.imgSrc = imgSrc;
@@ -20,5 +24,13 @@ public class MarsResult {
 
     public String getRoverName() {
         return roverName;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
     }
 }
