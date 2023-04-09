@@ -9,7 +9,7 @@ android {
     buildFeatures {
         viewBinding true
     }
-    
+
     defaultConfig {
         applicationId "com.example.final_project"
         minSdk 22
