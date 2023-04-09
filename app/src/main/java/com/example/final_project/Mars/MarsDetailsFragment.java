@@ -20,15 +20,37 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+/**
+ * Class for fragment showing photo details
+ */
 public class MarsDetailsFragment extends Fragment {
+    /** marsObj object holding currently selected object*/
     private MarsObj selected;
+    /** DAO for interacting with database*/
     private MarsFavDAO mrDAO;
 
+    /**
+     * Class constructor
+     * @param r MarsObj currently selected
+     * @param db database of saved photos
+     */
     public MarsDetailsFragment(MarsObj r, MarsDatabase db){
         selected = r;
         mrDAO = db.mrDAO();
     }
 
+    /**
+     * OnCreateView method for displaying data in fragment
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return View from ViewBinding
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);

@@ -2,13 +2,10 @@ package com.example.final_project.Mars;
 
 import android.graphics.Bitmap;
 
+/**
+ * Abstract parent class for MarsResult and MarsFav, exists to cast between MarsFav & MarsResult
+ */
 public abstract class MarsObj {
-//    protected String imgID;
-//    protected String imgSrc;
-//    protected String camName;
-//    protected String roverName;
-//
-//
     public abstract String getImgID();
     public abstract String getImgSrc();
     public abstract String getCamName();
