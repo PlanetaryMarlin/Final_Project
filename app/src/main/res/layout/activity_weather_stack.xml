@@ -7,7 +7,7 @@
     tools:context=".MarsActivity">
 
     <EditText
-        android:id="@+id/locationName"
+        android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -19,7 +19,7 @@
         tools:layout_editor_absoluteY="56dp" />
 
     <Button
-        android:id="@+id/searchButton"
+        android:id="@+id/search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"

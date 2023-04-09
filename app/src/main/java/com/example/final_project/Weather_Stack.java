@@ -72,13 +72,13 @@ public class Weather_Stack extends AppCompatActivity {
 
 
         // Weather
-        EditText locationName = binding.locationName;
-        Button search = binding.searchButton;
+        EditText locationName = binding.location;
+        Button search = binding.search;
         locationName.setText(String.valueOf(locationInput));
         queue = Volley.newRequestQueue(this);
 
-        binding.searchButton.setOnClickListener(click -> {
-            cityName = binding.locationName.getText().toString();
+        binding.search.setOnClickListener(click -> {
+            cityName = binding.location.getText().toString();
             String stringURL = null;
             try {
                 stringURL = new StringBuilder()
