@@ -21,9 +21,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MarsActivity"
-            android:exported="false" />
-        <activity
             android:name=".Weather_Stack"
             android:exported="false" />
         <activity
