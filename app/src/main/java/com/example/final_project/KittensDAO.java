@@ -15,7 +15,7 @@ public interface KittensDAO {
     void insertMessage(KittensEntity m);
     //@Query is whenever you want to make a SQL query
     @Query("Select * from KittensEntity")
-    List<KittensEntity> getAllMessages();
+    List<KittensEntity> getAllKittens();
 
     @Delete
     void deleteMessage(KittensEntity m);

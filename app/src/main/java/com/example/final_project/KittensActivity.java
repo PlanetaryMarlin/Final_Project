@@ -1,5 +1,6 @@
 package com.example.final_project;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
@@ -15,6 +16,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -71,10 +73,11 @@ public class KittensActivity extends AppCompatActivity {
         //assigns mode to it, in this case private
         //all our SharedPreferences is stored in Android, and right now we just want those two to be stored in prefs
 
-        String width = prefs.getString("width", null);
-        String height = prefs.getString("height", null);
+        String width = prefs.getString(KEY_WIDTH, null);
+        String height = prefs.getString(KEY_HEIGHT, null);
         bind.widthEditText.setText(width); // using String variable name
         bind.heightEditText.setText(height);
+        //reading data from sharedpref and putting it into the edittext
 
         bind.downloadImage.setOnClickListener(clk -> {
             widthInput = bind.widthEditText.getText().toString();
@@ -86,6 +89,7 @@ public class KittensActivity extends AppCompatActivity {
             //the editor edits the shared preferencces
             editor.putString(KEY_HEIGHT, heightInput);
             editor.putString(KEY_WIDTH, widthInput);
+            //writing data to sharedprefs
             //getting the editEmail that was already set to the email user inputed
             //editor.putString(yao@hotmail.com) that stores the email I put as a shared preference so that SecondActivity can access
             //Then in SecondActivity we will get the value from our previous activity from our shared preferences
@@ -162,10 +166,13 @@ public class KittensActivity extends AppCompatActivity {
         return dateFormat.format(date);
     }
 
-    private class DownloadImage extends AsyncTask {
+    private class DownloadImage extends AsyncTask<String, Void ,Bitmap> {
+        //have to pass 3 parameters to async task
+        //String is url input
+        //Bitmap is output
         @Override
-        protected Bitmap doInBackground(Object[] URL) {
-            String imageURL = (String) URL[0];
+        protected Bitmap doInBackground(String... strings) {
+            String imageURL = strings[0];
             Bitmap bitmap = null;
             try {
                 // Download Image from URL
@@ -179,10 +186,18 @@ public class KittensActivity extends AppCompatActivity {
         }
 
 
-        protected void onPostExecute(Bitmap result) {
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            //the next phase of the download, whatever you want to do with the data
+            //Async task under the hood will pass bitmap to onPostExecute without us asking
+            super.onPostExecute(bitmap);
             // Set the bitmap into ImageView
-            image.setImageBitmap(result);
+            bind.imageView.setImageBitmap(bitmap);
+            //sets the imageview
         }
+
+
     }
 
 
@@ -258,6 +273,12 @@ public class KittensActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 }
 
