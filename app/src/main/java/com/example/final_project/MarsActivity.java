@@ -41,9 +41,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -57,9 +54,10 @@ public class MarsActivity extends AppCompatActivity {
     private String date;
     private String url;
     private int position;
-    boolean isFavList = false;
+    boolean isFavList = false;  //Determines if recycler view shows search results or favourites
     MarsDatabase db;
 
+    //Toolbar navigation
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
@@ -114,8 +112,12 @@ public class MarsActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        //ViewModel for rotation changes
         marsModel = new ViewModelProvider(this).get(MarsViewModel.class);
-        results = marsModel.results.getValue();
+        isFavList = marsModel.isFavList;
+        if(isFavList) { favs = marsModel.favs.getValue(); }
+        else { results = marsModel.results.getValue(); }
+
         if (results == null){
             marsModel.results.setValue(results = new ArrayList<>());
         }
@@ -126,12 +128,14 @@ public class MarsActivity extends AppCompatActivity {
         setSupportActionBar(binding.toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        //SharedPrefs for saving editText contents
         SharedPreferences prefs = getSharedPreferences("MarsData", Context.MODE_PRIVATE);
         int marsInput = prefs.getInt("marsDate", 0);
         editTextDateNumber.setText(String.valueOf(marsInput));
 
         RequestQueue queue = Volley.newRequestQueue(this, new HurlStack());
 
+        //Click listener for the search button
         searchButton.setOnClickListener( clk -> {
             isFavList = false;
             results = new ArrayList<>();
@@ -180,6 +184,7 @@ public class MarsActivity extends AppCompatActivity {
             queue.add(request);
 
             marsModel.results.postValue(results);
+            marsModel.isFavList = isFavList;
 
             Toast.makeText(getApplicationContext(), "Searching for photos on date " + date, Toast.LENGTH_SHORT).show();
 
@@ -188,6 +193,7 @@ public class MarsActivity extends AppCompatActivity {
             editor.apply();
         });
 
+        //Click listener for saved images button
         favButton.setOnClickListener( clk -> {
             favs = new ArrayList<>();
             adapter.notifyDataSetChanged();
@@ -197,8 +203,9 @@ public class MarsActivity extends AppCompatActivity {
                 favs.addAll(mrDAO.getAllFavs());
                 runOnUiThread( () -> binding.recyclerView.setAdapter(adapter));
             });
+            marsModel.favs.postValue(favs);
+            marsModel.isFavList = isFavList;
         });
-
 
         binding.recyclerView.setAdapter(adapter = new RecyclerView.Adapter<ResultHolder>() {
 
@@ -213,9 +220,11 @@ public class MarsActivity extends AppCompatActivity {
             public void onBindViewHolder(@NonNull ResultHolder holder, int position) {
                 if (isFavList) {
                     MarsFav obj = favs.get(position);
+
                     String dir = getApplicationContext().getFilesDir().getPath();
                     File imgFile = new File(dir, obj.getImgPath());
                     Bitmap img = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+
                     obj.setBitmap(img);
                     holder.roverText.setText(obj.getRoverName());
                     holder.thumbnail.setImageBitmap(img);
@@ -244,7 +253,7 @@ public class MarsActivity extends AppCompatActivity {
                 return 0;
             }
         });
-    };
+    }
 
     class ResultHolder extends RecyclerView.ViewHolder {
         TextView roverText;
@@ -253,6 +262,7 @@ public class MarsActivity extends AppCompatActivity {
             super(itemView);
             thumbnail = itemView.findViewById(R.id.roverImage);
 
+            //Click listener for recyclerView items
             itemView.setOnClickListener(clk -> {
                 position = getAbsoluteAdapterPosition();
                 MarsDetailsFragment marsFragment;

@@ -8,9 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.final_project.R;
 import com.example.final_project.databinding.MarsFragmentBinding;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -40,17 +38,18 @@ public class MarsDetailsFragment extends Fragment {
         binding.cameraFragmentText.setText(selected.getCamName());
         binding.urlFragmentText.setText(selected.getImgSrc());
 
+        //Checks if an instance already exists in database
         List<MarsFav> search = new ArrayList<>();
         Executor thread = Executors.newSingleThreadExecutor();
         thread.execute(() -> {
             search.addAll(mrDAO.searchByID(selected.getImgID()));
             getActivity().runOnUiThread(() -> {
-                if (search.size() == 0) {
+                if (search.size() == 0) { //If no match, show save button
                     binding.saveButton.setVisibility(View.VISIBLE);
                     binding.saveButton.setEnabled(true);
                     binding.delButton.setVisibility(View.INVISIBLE);
                     binding.delButton.setEnabled(false);
-                } else {
+                } else { //If match, show delete button
                     binding.saveButton.setVisibility(View.INVISIBLE);
                     binding.saveButton.setEnabled(false);
                     binding.delButton.setVisibility(View.VISIBLE);
@@ -59,11 +58,14 @@ public class MarsDetailsFragment extends Fragment {
             });
         });
 
+        //Click listener to save a photo
         binding.saveButton.setOnClickListener(saveClk -> {
             binding.saveButton.setVisibility(View.INVISIBLE);
             binding.saveButton.setEnabled(false);
             binding.delButton.setVisibility(View.VISIBLE);
             binding.delButton.setEnabled(true);
+
+            //Saves bitmap to local storage
             FileOutputStream fOut = null;
             String filename = selected.getImgID() + ".png";
             try { fOut = getContext().openFileOutput(filename, Context.MODE_PRIVATE);
@@ -88,6 +90,7 @@ public class MarsDetailsFragment extends Fragment {
             });
         });
 
+        //Click listener for delete button
         binding.delButton.setOnClickListener(delClk -> {
             binding.saveButton.setVisibility(View.VISIBLE);
             binding.saveButton.setEnabled(true);
@@ -96,6 +99,8 @@ public class MarsDetailsFragment extends Fragment {
             thread.execute(() -> {
                 mrDAO.deleteFav((MarsFav) (MarsObj) selected);
             });
+
+            //Snackbar after deleting, gives undo option
             Snackbar.make(binding.getRoot(), "Removed from favourites", Snackbar.LENGTH_LONG)
                     .setAction("Undo", snackClk ->{
                         thread.execute(() -> {
