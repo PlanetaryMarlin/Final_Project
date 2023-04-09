@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Final_Project</string>
+    <!-- Mars -->
+    <string name="mars">Mars</string>
+    <string name="mars_date_entry">Enter a date (0–1000):</string>
+    <string name="mars_search">Search</string>
+    <string name="mars_saved">Saved</string>
+    <string name="mars_add_fav">Save as Favourite</string>
+    <string name="mars_del_fav">Remove from favourites</string>
+    <string name="menu_help">Help</string>
+
+
 </resources>
