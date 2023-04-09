@@ -38,7 +38,7 @@ public class Weather_Stack extends AppCompatActivity {
 
 
         EditText locationName = binding.locationName;
-        Button search = binding.search;
+        Button search = binding.searchButton;
 
         SharedPreferences prefs = getSharedPreferences("Weather_Location", Context.MODE_PRIVATE);
         String locationInput = prefs.getString("Location", "");
@@ -85,7 +85,7 @@ public class Weather_Stack extends AppCompatActivity {
         }
 
 
-        binding.recycle.setAdapter(myAdapter=new RecyclerView.Adapter<MyRowHolder>() {
+        binding.recyclerView.setAdapter(myAdapter=new RecyclerView.Adapter<MyRowHolder>() {
             @NonNull
             @Override
             //It represents a single row in the list
