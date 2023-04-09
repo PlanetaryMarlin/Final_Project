@@ -10,12 +10,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -78,6 +80,9 @@ public class KittensActivity extends AppCompatActivity {
         bind.widthEditText.setText(width); // using String variable name
         bind.heightEditText.setText(height);
         //reading data from sharedpref and putting it into the edittext
+
+        setSupportActionBar(bind.toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         bind.downloadImage.setOnClickListener(clk -> {
             widthInput = bind.widthEditText.getText().toString();
@@ -278,7 +283,32 @@ public class KittensActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return super.onOptionsItemSelected(item);
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId()){
+            case R.id.kittensItem:
+                Toast menuToast = Toast.makeText(getApplicationContext(), "Already in Kittens activity!", Toast.LENGTH_SHORT);
+                menuToast.show();
+                break;
+            case R.id.galleryItem:
+                Intent nextPage = new Intent(KittensActivity.this, GalleryActivity.class);
+                startActivity(nextPage);
+                break;
+            case R.id.helpItem:
+                AlertDialog.Builder builder = new AlertDialog.Builder(KittensActivity.this);
+                builder.setMessage("In this activity you can search for kittens images in different dimensions and save it if you want!")
+                        .setPositiveButton("OK", (dialog, cl) -> {})
+                        .setTitle("Kittens Help")
+                        .create().show();
+        }
+        return true;
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
 }
 
