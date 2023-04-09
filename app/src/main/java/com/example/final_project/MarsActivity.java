@@ -126,7 +126,7 @@ public class MarsActivity extends AppCompatActivity {
 
     /**
      * onCreate for activity
-     * @param savedInstanceState
+     * @param savedInstanceState Bundle object
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {

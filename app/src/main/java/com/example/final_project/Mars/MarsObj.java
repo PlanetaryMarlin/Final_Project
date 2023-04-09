@@ -3,7 +3,7 @@ package com.example.final_project.Mars;
 import android.graphics.Bitmap;
 
 /**
- * Abstract parent class for MarsResult and MarsFav, exists to cast between MarsFav & MarsResult
+ * Abstract parent class for MarsResult and MarsFav, exists to cast between MarsFav, MarsResult
  */
 public abstract class MarsObj {
     public abstract String getImgID();
