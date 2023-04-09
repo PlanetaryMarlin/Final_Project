@@ -34,6 +34,7 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import com.example.final_project.databinding.ActivityMainBinding;
 import com.example.final_project.databinding.ActivityWeatherStackBinding;
 import com.example.final_project.databinding.WeatherLocationResultsBinding;
 import com.google.android.material.snackbar.Snackbar;
@@ -63,22 +64,13 @@ public class Weather_Stack extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_weather_stack);
-        setContentView(R.layout.weather_location_results);
-        binding = ActivityWeatherStackBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
         SharedPreferences prefs = getSharedPreferences("Weather_Location", Context.MODE_PRIVATE);
-        String locationInput = prefs.getString("Location", "");
-
-
-        // Weather
-        EditText locationName = binding.location;
-        Button search = binding.search;
-        locationName.setText(String.valueOf(locationInput));
+        String cityTextField = prefs.getString("Location", "");
         queue = Volley.newRequestQueue(this);
-
-        binding.search.setOnClickListener(click -> {
-            cityName = binding.location.getText().toString();
+        ActivityWeatherStackBinding binding = ActivityWeatherStackBinding.inflate( getLayoutInflater() );
+        setContentView(binding.getRoot());
+        binding.getForecast.setOnClickListener(click -> {
+            cityName = binding.cityTextField.getText().toString();
             String stringURL = null;
             try {
                 stringURL = new StringBuilder()
@@ -87,7 +79,7 @@ public class Weather_Stack extends AppCompatActivity {
                         .append("&appid=a6cad38314bac12aa304fd6e5d6a7172&units=metric").toString();
             } catch (UnsupportedEncodingException e) {e.printStackTrace();}
 
-            WeatherLocationResultsBinding binding = WeatherLocationResultsBinding.inflate(getLayoutInflater());
+
             //this goes in the button click handler:
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, stringURL, null,
                     (response) -> {
@@ -153,68 +145,11 @@ public class Weather_Stack extends AppCompatActivity {
                         }
                     },
                     (error) -> {   });
-
             queue.add(request);
 
         });
 
-
-
-
-
-
-
-
-        class MyRowHolder extends RecyclerView.ViewHolder {
-            TextView listLocation;
-
-            public MyRowHolder(@NonNull View itemView) {
-                super(itemView);
-
-
-            }
-        }
-
-
-        binding.recycleView.setAdapter(myAdapter=new RecyclerView.Adapter<MyRowHolder>() {
-            @NonNull
-            @Override
-            //It represents a single row in the list
-            //MyRowHolder is an object for representing everything that goes on a row in the list.
-            public MyRowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                WeatherLocationResultsBinding binding = WeatherLocationResultsBinding.inflate(getLayoutInflater());
-                return new MyRowHolder(binding.getRoot());
-            }
-
-            //What are the text view set to.
-            //This initializes a ViewHolder to go at the row specified by the position parameter.
-            @Override
-            public void onBindViewHolder(@NonNull MyRowHolder holder, int position) {
-
-            }
-
-            @Override
-            public int getItemCount() {
-                return result.size();
-            }
-
-            public int getItemViewType(int position){
-                return 0;
-            }
-        });
-
-        binding.recycleView.setLayoutManager(new LinearLayoutManager(this));
-
-
     }
-
-
-
-
-
-
-
-
 
 
     }
