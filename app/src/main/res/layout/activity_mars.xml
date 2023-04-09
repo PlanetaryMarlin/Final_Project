@@ -7,7 +7,7 @@
     tools:context=".MarsActivity">
 
     <EditText
-        android:id="@+id/editTextDateNumber"
+        android:id="@+id/locationName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -31,8 +31,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Search"
-        app:layout_constraintStart_toEndOf="@+id/editTextDateNumber"
-        app:layout_constraintTop_toTopOf="@+id/editTextDateNumber" />
+        app:layout_constraintStart_toEndOf="@+id/locationName"
+        app:layout_constraintTop_toTopOf="@+id/locationName" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -41,5 +41,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextDateNumber" />
+        app:layout_constraintTop_toBottomOf="@+id/locationName" />
 </androidx.constraintlayout.widget.ConstraintLayout>
