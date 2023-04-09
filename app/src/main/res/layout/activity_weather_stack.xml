@@ -27,7 +27,7 @@
         app:layout_constraintEnd_toStartOf="@+id/saveButton"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/locationName" />
+        app:layout_constraintTop_toBottomOf="@+id/location" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -49,10 +49,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchButton">
+        app:layout_constraintTop_toBottomOf="@+id/search">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+            android:id="@+id/recycleView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </FrameLayout>
@@ -64,6 +64,6 @@
         android:text="Save Data"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.644"
-        app:layout_constraintStart_toEndOf="@+id/searchButton"
-        app:layout_constraintTop_toTopOf="@+id/searchButton" />
+        app:layout_constraintStart_toEndOf="@+id/search"
+        app:layout_constraintTop_toTopOf="@+id/search" />
 </androidx.constraintlayout.widget.ConstraintLayout>

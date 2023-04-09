@@ -176,7 +176,7 @@ public class Weather_Stack extends AppCompatActivity {
         }
 
 
-        binding.recyclerView.setAdapter(myAdapter=new RecyclerView.Adapter<MyRowHolder>() {
+        binding.recycleView.setAdapter(myAdapter=new RecyclerView.Adapter<MyRowHolder>() {
             @NonNull
             @Override
             //It represents a single row in the list
@@ -203,7 +203,7 @@ public class Weather_Stack extends AppCompatActivity {
             }
         });
 
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recycleView.setLayoutManager(new LinearLayoutManager(this));
 
 
     }
