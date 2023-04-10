@@ -9,7 +9,7 @@
 
     <item
         android:id="@+id/kittensItem"
-        android:title="Kittens"
+        android:title="KittensHome"
         app:showAsAction="always" />
 
     <item

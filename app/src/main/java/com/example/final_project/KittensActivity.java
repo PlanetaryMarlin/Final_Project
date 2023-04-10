@@ -284,6 +284,12 @@ import java.util.concurrent.Executors;
         }
     }
 
+    /**
+     * Menu for KittensActivity
+     * @param item The menu item that was selected.
+     *
+     * @return
+     */
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
