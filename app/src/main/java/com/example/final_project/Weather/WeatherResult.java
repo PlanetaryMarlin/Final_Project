@@ -12,7 +12,7 @@ import androidx.room.PrimaryKey;
 public class WeatherResult {
 
     @PrimaryKey @NonNull
-    @ColumnInfo(name = "imgID")
+    @ColumnInfo(name = "ID")
     public int id;
     @ColumnInfo(name = "current")
     protected double current;
@@ -35,7 +35,8 @@ public class WeatherResult {
     @Ignore
     protected Bitmap bitmap;
 
-    public WeatherResult(double current, double max, double min, int humidity, String iconName, String description){
+    public WeatherResult(int id, double current, double max, double min, int humidity, String iconName, String description){
+        this.id = id;
         this.current = current;
         this.max = max;
         this.min = min;
