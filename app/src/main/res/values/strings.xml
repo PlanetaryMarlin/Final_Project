@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Kittens</string>
+    <string name="saveFavourites">Get Image From URL</string>
 </resources>
