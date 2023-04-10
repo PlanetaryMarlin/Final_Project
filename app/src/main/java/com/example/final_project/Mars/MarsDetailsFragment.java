@@ -6,9 +6,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.final_project.MarsActivity;
+import com.example.final_project.databinding.ActivityMarsBinding;
 import com.example.final_project.databinding.MarsFragmentBinding;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -114,10 +118,11 @@ public class MarsDetailsFragment extends Fragment {
 
         //Click listener for delete button
         binding.delButton.setOnClickListener(delClk -> {
-            binding.saveButton.setVisibility(View.VISIBLE);
-            binding.saveButton.setEnabled(true);
+            binding.saveButton.setVisibility(View.INVISIBLE);
+            binding.saveButton.setEnabled(false);
             binding.delButton.setVisibility(View.INVISIBLE);
             binding.delButton.setEnabled(false);
+
             thread.execute(() -> {
                 mrDAO.deleteFav(selected);
             });
