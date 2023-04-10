@@ -50,9 +50,9 @@
 
         ActivityWeatherStackBinding binding;
 
-        private WeatherResult results;
+        private ArrayList<WeatherResult> results;
 
-        private WeatherView view;
+        private WeatherView weatherView;
 
         private RecyclerView.Adapter myAdapter;
         private String cityName;
@@ -113,10 +113,13 @@
             setSupportActionBar(binding.toolbar);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+
             SharedPreferences prefs = getSharedPreferences("Weather_Location", Context.MODE_PRIVATE);
-            cityName = prefs.getString("Location", "");
-            cityName = binding.cityTextField.getText().toString();
+            binding.cityTextField.setText(prefs.getString("Location", ""));
+
             setContentView(binding.getRoot());
+
+            //Create Database
             Weather_Database db = Room.databaseBuilder(getApplicationContext(), Weather_Database.class, "weather-saves").build();
 
 
