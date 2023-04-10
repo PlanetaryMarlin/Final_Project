@@ -226,7 +226,7 @@ public class NewYorkTimes extends AppCompatActivity {
 
                                 for (int i = 0; i < docArray.length(); i++) {
 
-                                    //  Log.i("13213", "onCreate: "+docArray.getJSONObject(i));
+
 
 
                                     articleItems.add(new ArticleItem(docArray.getJSONObject(i).getJSONObject("headline").getString("main"),
@@ -236,7 +236,7 @@ public class NewYorkTimes extends AppCompatActivity {
                                         myAdapter.notifyItemInserted(articleItems.size()-1);
 
 
-                                    Log.i("13213", "onCreate: " + docArray.getJSONObject(i).getString("abstract"));
+
 
 
                                 }
