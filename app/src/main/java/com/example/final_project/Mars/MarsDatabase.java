@@ -4,9 +4,9 @@ import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
 /**
- * Database class for MarsFav objects
+ * Database class for MarsResult objects saved as favourites
  */
-@Database(entities = {MarsFav.class}, version = 1)
+@Database(entities = {MarsResult.class}, version = 1)
 public abstract class MarsDatabase extends RoomDatabase {
-    public abstract MarsFavDAO mrDAO();
+    public abstract MarsResultDAO mrDAO();
 }
