@@ -57,7 +57,7 @@ public class Weather_Stack extends AppCompatActivity {
     ActivityWeatherStackBinding binding;
 
 
-    private ArrayList<WeatherResult> results;
+    private WeatherResult results;
 
     private RecyclerView.Adapter myAdapter;
     private String cityName;
@@ -87,7 +87,7 @@ public class Weather_Stack extends AppCompatActivity {
         binding.getForecast.setOnClickListener(click -> {
             cityName = binding.cityTextField.getText().toString();
             String stringURL = null;
-            results = new ArrayList<>();
+
             try {
                 stringURL = new StringBuilder()
                         .append("http://api.weatherstack.com/current?")
@@ -155,7 +155,6 @@ public class Weather_Stack extends AppCompatActivity {
                 Executor thread = Executors.newSingleThreadExecutor();
                 thread.execute(() -> {
                 WeatherDAO weatherDAO = db.weatherDAO();
-
                     weatherDAO.insertSave(results);
                 });
 
