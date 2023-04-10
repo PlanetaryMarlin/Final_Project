@@ -4,6 +4,7 @@
     import androidx.appcompat.app.AlertDialog;
     import androidx.appcompat.app.AppCompatActivity;
 
+    import androidx.recyclerview.widget.LinearLayoutManager;
     import androidx.recyclerview.widget.RecyclerView;
     import androidx.room.Room;
 
@@ -13,6 +14,7 @@
     import android.graphics.Bitmap;
 
     import android.os.Bundle;
+    import android.view.LayoutInflater;
     import android.view.Menu;
     import android.view.MenuItem;
     import android.view.View;
@@ -28,6 +30,7 @@
     import com.example.final_project.Weather.WeatherView;
     import com.example.final_project.Weather.Weather_Database;
     import com.example.final_project.databinding.ActivityWeatherStackBinding;
+    import com.example.final_project.databinding.MarsResultBinding;
     import com.example.final_project.databinding.WeatherLocationResultsBinding;
     import com.google.android.material.snackbar.Snackbar;
 
@@ -155,6 +158,7 @@
                                         thread.execute(() -> {
                                             WeatherDAO weatherDAO = db.weatherDAO();
                                                 weatherDAO.insertSave(results);
+
                                         });
 
                                         Toast.makeText(getApplicationContext(), "Result saved.", Toast.LENGTH_SHORT).show();
@@ -192,6 +196,7 @@
                         (error) -> {   });
                 queue.add(request);
 
+
                 Toast.makeText(getApplicationContext(), "Receiving Weather Information on: " + cityName, Toast.LENGTH_SHORT).show();
 
             });
@@ -206,27 +211,42 @@
             }
 
 
-            binding.recyclerView.setAdapter(new RecyclerView.Adapter<MyRowHolder>() {
+            /**
+             * Contain RecyclerView
+             */
+
+            binding.recyclerView.setAdapter(myAdapter = new RecyclerView.Adapter<MyRowHolder>() {
                 @NonNull
                 @Override
+                //It represents a single row in the list
+                //MyRowHolder is an object for representing everything that goes on a row in the list.
                 public MyRowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                    WeatherLocationResultsBinding binding = WeatherLocationResultsBinding.inflate(getLayoutInflater());
+                    WeatherLocationResultsBinding binding = WeatherLocationResultsBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
 
                     return new MyRowHolder(binding.getRoot());
                 }
-
+                /**
+                 *
+                 * @param holder   The ViewHolder which should be updated to represent the contents of the
+                 *                 item at the given position in the data set.
+                 * @param position The position of the item within the adapter's data set.
+                 */
                 @Override
                 public void onBindViewHolder(@NonNull MyRowHolder holder, int position) {
                     WeatherResult weather = results;
                     holder.city.setText("");
                 }
 
+                /**
+                 *
+                 * @return nothing
+                 */
                 @Override
                 public int getItemCount() {
-                    WeatherResult weather = results;
-                    return weather.id;
+                    return 0;
                 }
             });
+            binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
 
