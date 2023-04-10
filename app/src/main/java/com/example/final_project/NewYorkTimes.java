@@ -190,7 +190,7 @@ public class NewYorkTimes extends AppCompatActivity {
 
             try {
                 url = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q=" + URLEncoder.encode(search, "UTF-8") + "&api-key=" + apiKey;
-                Log.i("json", "onCreate: "+url);
+
 
 
                 JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -206,7 +206,6 @@ public class NewYorkTimes extends AppCompatActivity {
 
                                 JSONObject responseObj = response.getJSONObject("response");
 
-                                //   Log.i("jason", "onCreate: " + response);
 
                                 JSONArray docArray = responseObj.getJSONArray("docs");
 
@@ -226,7 +225,7 @@ public class NewYorkTimes extends AppCompatActivity {
 
                                 for (int i = 0; i < docArray.length(); i++) {
 
-                                    //  Log.i("13213", "onCreate: "+docArray.getJSONObject(i));
+
 
 
                                     articleItems.add(new ArticleItem(docArray.getJSONObject(i).getJSONObject("headline").getString("main"),
@@ -236,7 +235,8 @@ public class NewYorkTimes extends AppCompatActivity {
                                         myAdapter.notifyItemInserted(articleItems.size()-1);
 
 
-                                    Log.i("13213", "onCreate: " + docArray.getJSONObject(i).getString("abstract"));
+
+
 
 
                                 }
@@ -263,7 +263,7 @@ public class NewYorkTimes extends AppCompatActivity {
 
 
             } catch (UnsupportedEncodingException e) {
-                //  Log.i("tag", "onCreate: "+e);
+
 
 
                 throw new RuntimeException(e);
@@ -370,9 +370,7 @@ public class NewYorkTimes extends AppCompatActivity {
             itemView.setOnClickListener(clk -> {
 
                 int position = getAbsoluteAdapterPosition();
-                //  WeatherItem selected = weatherItems.get(position);
 
-                //  weatherModel.selectedWeatherItem.postValue(selected);
             });
 
             row_headline = itemView.findViewById(R.id.row_head_line);
