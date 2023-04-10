@@ -39,8 +39,12 @@ import java.util.Date;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+/**
+ * Page for downloading Kittens image from URL using Volley
+ *
+ */
 
-public class KittensActivity extends AppCompatActivity {
+ public class KittensActivity extends AppCompatActivity {
     String widthInput;
     String heightInput;
     String urlKitten = String.format("https://placekitten.com/%s/%s", widthInput, heightInput);

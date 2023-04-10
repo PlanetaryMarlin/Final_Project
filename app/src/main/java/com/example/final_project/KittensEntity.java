@@ -4,7 +4,9 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 //tells the database what to store
-
+/**
+ * Database class for Kittens entity
+ */
 @Entity
 public class KittensEntity {
 

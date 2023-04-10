@@ -5,6 +5,9 @@ import androidx.room.Insert;
 import androidx.room.Query;
 
 import java.util.List;
+/**
+ * DAO for KittensEntity class
+ */
 @Dao
 //whenever there is a DAO class have to annotate it with DAO
 //This class deals with CRUD operation

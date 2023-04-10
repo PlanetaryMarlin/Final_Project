@@ -6,7 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
-
+/**
+ * Class for fragment showing image details
+ */
 public class ImageFragment extends Fragment {
     KittensEntity selected;
 

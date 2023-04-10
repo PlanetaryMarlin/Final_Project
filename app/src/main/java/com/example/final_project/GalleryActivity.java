@@ -69,6 +69,12 @@ public class GalleryActivity extends AppCompatActivity {
                 return new ResultHolder(holderItemBinding.getRoot());
             }
 
+            /**
+             *
+             * @param holder The ViewHolder which should be updated to represent the contents of the
+             *        item at the given position in the data set.
+             * @param position The position of the item within the adapter's data set.
+             */
             @Override
             //for each row in recylcerview show height and width
             public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
@@ -87,6 +93,11 @@ public class GalleryActivity extends AppCompatActivity {
 
         TextView textView;
         Button button;
+
+        /**
+         *
+         * @param itemView
+         */
 
         public ResultHolder(@NonNull View itemView) {
             super(itemView);

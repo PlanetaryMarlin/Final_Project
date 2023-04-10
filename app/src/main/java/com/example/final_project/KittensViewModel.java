@@ -4,7 +4,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
-
+/**
+ * Class for viewmodel for KittensActivity, protects data from rotation changes
+ */
 public class KittensViewModel extends ViewModel {
     public MutableLiveData<ArrayList<KittensEntity>> messages = new MutableLiveData<>();
     public MutableLiveData<KittensEntity> selectedMessage = new MutableLiveData< >();
