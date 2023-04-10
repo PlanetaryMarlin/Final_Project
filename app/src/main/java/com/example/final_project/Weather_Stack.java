@@ -72,7 +72,7 @@ public class Weather_Stack extends AppCompatActivity {
         queue = Volley.newRequestQueue(this);
         binding = ActivityWeatherStackBinding.inflate( getLayoutInflater() );
         SharedPreferences prefs = getSharedPreferences("Weather_Location", Context.MODE_PRIVATE);
-        final String[] cityName = {prefs.getString("Location", "")};
+        cityName = prefs.getString("Location", "");
         setContentView(binding.getRoot());
 
         Weather_Database db = Room.databaseBuilder(getApplicationContext(), Weather_Database.class, "weather-saves").build();
@@ -85,14 +85,15 @@ public class Weather_Stack extends AppCompatActivity {
 
 
         binding.getForecast.setOnClickListener(click -> {
-            cityName[0] = binding.cityTextField.getText().toString();
+            cityName = binding.cityTextField.getText().toString();
             String stringURL = null;
             results = new ArrayList<>();
             try {
                 stringURL = new StringBuilder()
-                        .append ("https://api.openweathermap.org/data/2.5/weather?q=")
-                        .append (URLEncoder.encode(cityName[0], "UTF-8"))
-                        .append("&appid=a6cad38314bac12aa304fd6e5d6a7172&units=metric").toString();
+                        .append("http://api.weatherstack.com/current?")
+                        .append("access_key=cae54dfb61e45f9879c214ec35487b7a")
+                        .append("&query=")
+                        .append(URLEncoder.encode(cityName, "UTF-8")).toString();
             } catch (UnsupportedEncodingException e) {e.printStackTrace();}
 
 
@@ -100,65 +101,39 @@ public class Weather_Stack extends AppCompatActivity {
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, stringURL, null,
                     (response) -> {
                         try {
-                            JSONObject coord = response.getJSONObject("coord");
-                            JSONArray weatherArray = response.getJSONArray("weather");
-                            JSONObject position0 = weatherArray.getJSONObject(0);
-                            String description = position0.getString("description");
-                            String iconName = position0.getString("icon");
-                            JSONObject mainObject = response.getJSONObject("main");
-                            double current = mainObject.getDouble("temp");
-                            double min = mainObject.getDouble("temp_min");
-                            double max = mainObject.getDouble("temp_max");
-                            int humidity = mainObject.getInt("humidity");
-                            WeatherResult result = new WeatherResult(current,min,max,humidity,iconName,description);
+                            JSONObject locationObject = response.getJSONObject("location");
+                            String city_name = locationObject.getString("name");
+                            String country_name = locationObject.getString("country");
+                            String time = locationObject.getString("localtime");
+                            JSONObject temp = response.getJSONObject("current");
+                            double current = temp.getDouble("temperature");
+                            JSONObject description = response.getJSONObject("current");
+                            double visibility = description.getDouble("visibility");
+                            double feelslike = description.getDouble("feelslike");
+                            int humidity = description.getInt("humidity");
 
 
                             runOnUiThread(() -> {
-                                binding.temp.setText("The current temperature is " + current);
+                                binding.cityName.setText("City is: " + city_name);
+                                binding.cityName.setVisibility(View.VISIBLE);
+                                binding.countryName.setText("Country: " + country_name);
+                                binding.countryName.setVisibility(View.VISIBLE);
+                                binding.temp.setText("The current temperature is: " + current + "Degrees");
                                 binding.temp.setVisibility(View.VISIBLE);
-                                binding.minTemp.setText("The min temperature is " + min);
-                                binding.minTemp.setVisibility(View.VISIBLE);
-                                binding.maxTemp.setText("The max temperature is " + max);
-                                binding.maxTemp.setVisibility(View.VISIBLE);
+                                binding.time.setText("Current time is: " + time);
+                                binding.time.setVisibility(View.VISIBLE);
+                                binding.visibility.setText("Current Visibility: " + visibility);
+                                binding.visibility.setVisibility(View.VISIBLE);
+                                binding.feelslike.setText("Current Visibility: " + feelslike);
+                                binding.feelslike.setVisibility(View.VISIBLE);
                                 binding.humidity.setText("The humidity is " + humidity + "%");
                                 binding.humidity.setVisibility(View.VISIBLE);
                                 binding.icon.setImageBitmap(image);
                                 binding.icon.setVisibility(View.VISIBLE);
-                                binding.description.setText(description);
-                                binding.description.setVisibility(View.VISIBLE);
+
+                                //results.add(result);
+
                             });
-
-
-                            try {
-                                String pathname = getFilesDir() + "/" + iconName + ".png";
-                                File file = new File(pathname);
-                                if (file.exists()) {
-                                    image = BitmapFactory.decodeFile(pathname);
-                                } else {
-                                    ImageRequest imgReq = new ImageRequest("https://openweathermap.org/img/w/" +
-                                            iconName + ".png", new Response.Listener<Bitmap>() {
-                                        @Override
-                                        public void onResponse(Bitmap bitmap) {
-                                            try {
-                                                image = bitmap;
-
-                                                image.compress(Bitmap.CompressFormat.PNG, 100,
-                                                        Weather_Stack.this.openFileOutput(iconName + ".png", Activity.MODE_PRIVATE));
-                                                binding.icon.setImageBitmap(image);
-                                                results.add(result);
-
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    }, 1024, 1024, ImageView.ScaleType.CENTER, null, (error) -> {
-                                        Toast.makeText(Weather_Stack.this, "" + error, Toast.LENGTH_SHORT).show();
-                                    });
-                                    queue.add(imgReq);
-                                }
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
-                            }
 
 
                         } catch (JSONException e) {
@@ -168,7 +143,7 @@ public class Weather_Stack extends AppCompatActivity {
                     (error) -> {   });
             queue.add(request);
 
-            Toast.makeText(getApplicationContext(), "Receiving Weather Information on: " + cityName[0], Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Receiving Weather Information on: " + cityName, Toast.LENGTH_SHORT).show();
 
         });
         binding.saveButton.setOnClickListener(new View.OnClickListener() {
