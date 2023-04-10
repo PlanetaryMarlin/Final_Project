@@ -6,5 +6,5 @@ import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 
 public class WeatherView extends ViewModel {
-    public MutableLiveData<WeatherResult> results = new MutableLiveData<>();
+    public MutableLiveData<String> cityName = new MutableLiveData<>();
 }

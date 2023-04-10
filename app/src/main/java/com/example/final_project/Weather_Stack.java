@@ -115,6 +115,7 @@
 
             binding.getForecast.setOnClickListener(click -> {
                 cityName = binding.cityTextField.getText().toString();
+
                 String stringURL = null;
 
                 try {
