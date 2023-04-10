@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Final_Project</string>
+    <string name="mars_date_entry">Entrez un date (0-1000):</string>
+    <string name="mars_search">Recherche</string>
+    <string name="mars_saved">Enregistré</string>
+    <string name="mars_add_fav">Enregistrer comme favori</string>
+    <string name="mars_del_fav">Enlever des favoris</string>
+    <string name="mars">Mars</string>
+    <string name="menu_help">Aider</string>
+</resources>
