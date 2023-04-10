@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +24,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -56,27 +54,25 @@ public class Weather_Stack extends AppCompatActivity {
 
     ActivityWeatherStackBinding binding;
 
-
     private ArrayList<WeatherResult> results;
-
     private RecyclerView.Adapter myAdapter;
     private String cityName;
     RequestQueue queue = null;
-
     Bitmap image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         queue = Volley.newRequestQueue(this);
+
+        //Shared Preference
         binding = ActivityWeatherStackBinding.inflate( getLayoutInflater() );
         SharedPreferences prefs = getSharedPreferences("Weather_Location", Context.MODE_PRIVATE);
         final String[] cityName = {prefs.getString("Location", "")};
         setContentView(binding.getRoot());
 
-        Weather_Database db = Room.databaseBuilder(getApplicationContext(), Weather_Database.class, "weather-saves").build();
-        WeatherDAO weatherDAO = db.weatherDAO();
+
+
 
 
 
@@ -90,9 +86,9 @@ public class Weather_Stack extends AppCompatActivity {
             results = new ArrayList<>();
             try {
                 stringURL = new StringBuilder()
-                        .append ("https://api.openweathermap.org/data/2.5/weather?q=")
-                        .append (URLEncoder.encode(cityName[0], "UTF-8"))
-                        .append("&appid=a6cad38314bac12aa304fd6e5d6a7172&units=metric").toString();
+                        .append("http://api.weatherstack.com/current?access_key=cae54dfb61e45f9879c214ec35487b7a")
+                        .append("&query=")
+                        .append(URLEncoder.encode(String.valueOf(cityName),"UTF-8")).toString();
             } catch (UnsupportedEncodingException e) {e.printStackTrace();}
 
 
@@ -100,6 +96,10 @@ public class Weather_Stack extends AppCompatActivity {
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, stringURL, null,
                     (response) -> {
                         try {
+
+
+
+
                             JSONObject coord = response.getJSONObject("coord");
                             JSONArray weatherArray = response.getJSONArray("weather");
                             JSONObject position0 = weatherArray.getJSONObject(0);
@@ -110,7 +110,7 @@ public class Weather_Stack extends AppCompatActivity {
                             double min = mainObject.getDouble("temp_min");
                             double max = mainObject.getDouble("temp_max");
                             int humidity = mainObject.getInt("humidity");
-                            WeatherResult result = new WeatherResult(current,min,max,humidity,iconName,description);
+                            WeatherResult result = new WeatherResult(current,max,min,humidity,iconName,description);
 
 
                             runOnUiThread(() -> {
@@ -172,13 +172,15 @@ public class Weather_Stack extends AppCompatActivity {
 
         });
         binding.saveButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
+                Weather_Database db = Room.databaseBuilder(getApplicationContext(), Weather_Database.class, "weather-saves").build();
+                //WeatherDAO weatherDAO = db.weatherDAO();
                 Executor thread = Executors.newSingleThreadExecutor();
+
                 thread.execute(() -> {
                 WeatherDAO weatherDAO = db.weatherDAO();
-                weatherDAO.insertSave(results);
-
                     weatherDAO.insertSave(results);
                 });
 
