@@ -16,6 +16,8 @@
     import android.view.Menu;
     import android.view.MenuItem;
     import android.view.View;
+    import android.view.ViewGroup;
+    import android.widget.TextView;
     import android.widget.Toast;
     import com.android.volley.Request;
     import com.android.volley.RequestQueue;
@@ -26,6 +28,7 @@
     import com.example.final_project.Weather.WeatherView;
     import com.example.final_project.Weather.Weather_Database;
     import com.example.final_project.databinding.ActivityWeatherStackBinding;
+    import com.example.final_project.databinding.WeatherLocationResultsBinding;
     import com.google.android.material.snackbar.Snackbar;
 
     import org.json.JSONException;
@@ -75,7 +78,7 @@
                     startActivity(nextPage);
                     break;
                 case R.id.NYItem:
-    //                Intent nextPage = new Intent(MarsActivity.this,)
+    //                Intent nextPage = new Intent(Weather_Stack.this,)
     //                startActivity(nextPage);
                     break;
                 case R.id.helpItem:
@@ -193,8 +196,37 @@
 
             });
 
+            class MyRowHolder extends RecyclerView.ViewHolder {
+                TextView city;
+                public MyRowHolder(@NonNull View itemView) {
+                    super(itemView);
+                    city = itemView.findViewById(R.id.cityData);
+
+                }
+            }
 
 
+            binding.recyclerView.setAdapter(new RecyclerView.Adapter<MyRowHolder>() {
+                @NonNull
+                @Override
+                public MyRowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                    WeatherLocationResultsBinding binding = WeatherLocationResultsBinding.inflate(getLayoutInflater());
+
+                    return new MyRowHolder(binding.getRoot());
+                }
+
+                @Override
+                public void onBindViewHolder(@NonNull MyRowHolder holder, int position) {
+                    WeatherResult weather = results;
+                    holder.city.setText("");
+                }
+
+                @Override
+                public int getItemCount() {
+                    WeatherResult weather = results;
+                    return weather.id;
+                }
+            });
 
 
 

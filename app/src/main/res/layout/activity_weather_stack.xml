@@ -126,5 +126,15 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="95dp" />
 
+    <FrameLayout
+        android:id="@+id/WeatherFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
 
 </LinearLayout>
