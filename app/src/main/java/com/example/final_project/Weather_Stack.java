@@ -34,6 +34,13 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import com.example.final_project.Mars.MarsDatabase;
+import com.example.final_project.Mars.MarsFavDAO;
+import com.example.final_project.Mars.MarsResult;
+import com.example.final_project.Weather.WeatherDAO;
+import com.example.final_project.Weather.WeatherResult;
+import com.example.final_project.Weather.Weather_Database;
+import com.example.final_project.databinding.ActivityMainBinding;
 import com.example.final_project.databinding.ActivityWeatherStackBinding;
 import com.example.final_project.databinding.WeatherLocationResultsBinding;
 import com.google.android.material.snackbar.Snackbar;
@@ -53,9 +60,11 @@ public class Weather_Stack extends AppCompatActivity {
 
     ActivityWeatherStackBinding binding;
 
-    ArrayList<String> result = new ArrayList<>();
+
+    private ArrayList<WeatherResult> results;
+
     private RecyclerView.Adapter myAdapter;
-    protected String cityName;
+    private String cityName;
     RequestQueue queue = null;
 
     Bitmap image;
@@ -63,31 +72,34 @@ public class Weather_Stack extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_weather_stack);
-        setContentView(R.layout.weather_location_results);
-        binding = ActivityWeatherStackBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        SharedPreferences prefs = getSharedPreferences("Weather_Location", Context.MODE_PRIVATE);
-        String locationInput = prefs.getString("Location", "");
 
-
-        // Weather
-        EditText locationName = binding.location;
-        Button search = binding.search;
-        locationName.setText(String.valueOf(locationInput));
         queue = Volley.newRequestQueue(this);
+        binding = ActivityWeatherStackBinding.inflate( getLayoutInflater() );
+        SharedPreferences prefs = getSharedPreferences("Weather_Location", Context.MODE_PRIVATE);
+        final String[] cityName = {prefs.getString("Location", "")};
+        setContentView(binding.getRoot());
 
-        binding.search.setOnClickListener(click -> {
-            cityName = binding.location.getText().toString();
+        Weather_Database db = Room.databaseBuilder(getApplicationContext(), Weather_Database.class, "weather-saves").build();
+        WeatherDAO weatherDAO = db.weatherDAO();
+
+
+
+
+
+
+
+        binding.getForecast.setOnClickListener(click -> {
+            cityName[0] = binding.cityTextField.getText().toString();
             String stringURL = null;
+            results = new ArrayList<>();
             try {
                 stringURL = new StringBuilder()
                         .append ("https://api.openweathermap.org/data/2.5/weather?q=")
-                        .append (URLEncoder.encode(cityName, "UTF-8"))
+                        .append (URLEncoder.encode(cityName[0], "UTF-8"))
                         .append("&appid=a6cad38314bac12aa304fd6e5d6a7172&units=metric").toString();
             } catch (UnsupportedEncodingException e) {e.printStackTrace();}
 
-            WeatherLocationResultsBinding binding = WeatherLocationResultsBinding.inflate(getLayoutInflater());
+
             //this goes in the button click handler:
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, stringURL, null,
                     (response) -> {
@@ -102,6 +114,7 @@ public class Weather_Stack extends AppCompatActivity {
                             double min = mainObject.getDouble("temp_min");
                             double max = mainObject.getDouble("temp_max");
                             int humidity = mainObject.getInt("humidity");
+                            WeatherResult result = new WeatherResult(current,min,max,humidity,iconName,description);
 
 
                             runOnUiThread(() -> {
@@ -119,6 +132,7 @@ public class Weather_Stack extends AppCompatActivity {
                                 binding.description.setVisibility(View.VISIBLE);
                             });
 
+
                             try {
                                 String pathname = getFilesDir() + "/" + iconName + ".png";
                                 File file = new File(pathname);
@@ -131,9 +145,12 @@ public class Weather_Stack extends AppCompatActivity {
                                         public void onResponse(Bitmap bitmap) {
                                             try {
                                                 image = bitmap;
+
                                                 image.compress(Bitmap.CompressFormat.PNG, 100,
                                                         Weather_Stack.this.openFileOutput(iconName + ".png", Activity.MODE_PRIVATE));
                                                 binding.icon.setImageBitmap(image);
+                                                results.add(result);
+
                                             } catch (Exception e) {
                                                 e.printStackTrace();
                                             }
@@ -153,9 +170,25 @@ public class Weather_Stack extends AppCompatActivity {
                         }
                     },
                     (error) -> {   });
-
             queue.add(request);
 
+            Toast.makeText(getApplicationContext(), "Receiving Weather Information on: " + cityName[0], Toast.LENGTH_SHORT).show();
+
+        });
+        binding.saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Executor thread = Executors.newSingleThreadExecutor();
+                thread.execute(() -> {
+                WeatherDAO weatherDAO = db.weatherDAO();
+                weatherDAO.insertSave(results);
+
+                    weatherDAO.insertSave(results);
+                });
+
+                Toast.makeText(getApplicationContext(), "Result saved.", Toast.LENGTH_SHORT).show();
+            }
+
         });
 
 
@@ -165,56 +198,10 @@ public class Weather_Stack extends AppCompatActivity {
 
 
 
-        class MyRowHolder extends RecyclerView.ViewHolder {
-            TextView listLocation;
 
-            public MyRowHolder(@NonNull View itemView) {
-                super(itemView);
-
-
-            }
-        }
-
-
-        binding.recycleView.setAdapter(myAdapter=new RecyclerView.Adapter<MyRowHolder>() {
-            @NonNull
-            @Override
-            //It represents a single row in the list
-            //MyRowHolder is an object for representing everything that goes on a row in the list.
-            public MyRowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                WeatherLocationResultsBinding binding = WeatherLocationResultsBinding.inflate(getLayoutInflater());
-                return new MyRowHolder(binding.getRoot());
-            }
-
-            //What are the text view set to.
-            //This initializes a ViewHolder to go at the row specified by the position parameter.
-            @Override
-            public void onBindViewHolder(@NonNull MyRowHolder holder, int position) {
-
-            }
-
-            @Override
-            public int getItemCount() {
-                return result.size();
-            }
-
-            public int getItemViewType(int position){
-                return 0;
-            }
-        });
-
-        binding.recycleView.setLayoutManager(new LinearLayoutManager(this));
 
 
     }
-
-
-
-
-
-
-
-
 
 
     }
