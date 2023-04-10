@@ -6,53 +6,13 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/temp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Temp goes here"
-        android:visibility="visible" />
-
-    <TextView
-        android:id="@+id/maxTemp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Max goes here"
-        android:visibility="visible"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="19dp" />
-
-    <TextView
-        android:id="@+id/minTemp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Min goes here"
-        android:visibility="visible"
-        tools:layout_editor_absoluteX="-16dp"
-        tools:layout_editor_absoluteY="38dp" />
-
-    <TextView
-        android:id="@+id/humidity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Humidity goes here"
-        android:visibility="visible"
-        tools:layout_editor_absoluteX="-16dp"
-        tools:layout_editor_absoluteY="57dp" />
-
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="42dp"
-        android:layout_height="35dp"
-        android:visibility="visible"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="95dp" />
-
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Description goes here."
-        android:visibility="visible"
-        tools:layout_editor_absoluteX="-16dp"
-        tools:layout_editor_absoluteY="76dp" />
+        android:id="@+id/cityData"
+        android:layout_width="166dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="4dp"
+        android:text="City Goes Here"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

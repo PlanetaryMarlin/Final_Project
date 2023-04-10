@@ -4,6 +4,7 @@
     import androidx.appcompat.app.AlertDialog;
     import androidx.appcompat.app.AppCompatActivity;
 
+    import androidx.recyclerview.widget.LinearLayoutManager;
     import androidx.recyclerview.widget.RecyclerView;
     import androidx.room.Room;
 
@@ -13,9 +14,12 @@
     import android.graphics.Bitmap;
 
     import android.os.Bundle;
+    import android.view.LayoutInflater;
     import android.view.Menu;
     import android.view.MenuItem;
     import android.view.View;
+    import android.view.ViewGroup;
+    import android.widget.TextView;
     import android.widget.Toast;
     import com.android.volley.Request;
     import com.android.volley.RequestQueue;
@@ -26,6 +30,8 @@
     import com.example.final_project.Weather.WeatherView;
     import com.example.final_project.Weather.Weather_Database;
     import com.example.final_project.databinding.ActivityWeatherStackBinding;
+    import com.example.final_project.databinding.MarsResultBinding;
+    import com.example.final_project.databinding.WeatherLocationResultsBinding;
     import com.google.android.material.snackbar.Snackbar;
 
     import org.json.JSONException;
@@ -63,7 +69,7 @@
             super.onOptionsItemSelected(item);
             switch (item.getItemId()){
                 case R.id.weatherItem:
-                    Toast menuToast = Toast.makeText(getApplicationContext(), "Already in Mars", Toast.LENGTH_SHORT);
+                    Toast menuToast = Toast.makeText(getApplicationContext(), "Currently In Weather.", Toast.LENGTH_SHORT);
                     menuToast.show();
                     break;
                 case R.id.marsItem:
@@ -75,7 +81,7 @@
                     startActivity(nextPage);
                     break;
                 case R.id.NYItem:
-    //                Intent nextPage = new Intent(MarsActivity.this,)
+    //                Intent nextPage = new Intent(Weather_Stack.this,)
     //                startActivity(nextPage);
                     break;
                 case R.id.helpItem:
@@ -152,6 +158,7 @@
                                         thread.execute(() -> {
                                             WeatherDAO weatherDAO = db.weatherDAO();
                                                 weatherDAO.insertSave(results);
+
                                         });
 
                                         Toast.makeText(getApplicationContext(), "Result saved.", Toast.LENGTH_SHORT).show();
@@ -189,12 +196,57 @@
                         (error) -> {   });
                 queue.add(request);
 
+
                 Toast.makeText(getApplicationContext(), "Receiving Weather Information on: " + cityName, Toast.LENGTH_SHORT).show();
 
             });
 
+            class MyRowHolder extends RecyclerView.ViewHolder {
+                TextView city;
+                public MyRowHolder(@NonNull View itemView) {
+                    super(itemView);
+                    city = itemView.findViewById(R.id.cityData);
+
+                }
+            }
 
 
+            /**
+             * Contain RecyclerView
+             */
+
+            binding.recyclerView.setAdapter(myAdapter = new RecyclerView.Adapter<MyRowHolder>() {
+                @NonNull
+                @Override
+                //It represents a single row in the list
+                //MyRowHolder is an object for representing everything that goes on a row in the list.
+                public MyRowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                    WeatherLocationResultsBinding binding = WeatherLocationResultsBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+
+                    return new MyRowHolder(binding.getRoot());
+                }
+                /**
+                 *
+                 * @param holder   The ViewHolder which should be updated to represent the contents of the
+                 *                 item at the given position in the data set.
+                 * @param position The position of the item within the adapter's data set.
+                 */
+                @Override
+                public void onBindViewHolder(@NonNull MyRowHolder holder, int position) {
+                    WeatherResult weather = results;
+                    holder.city.setText("");
+                }
+
+                /**
+                 *
+                 * @return nothing
+                 */
+                @Override
+                public int getItemCount() {
+                    return 0;
+                }
+            });
+            binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
 
