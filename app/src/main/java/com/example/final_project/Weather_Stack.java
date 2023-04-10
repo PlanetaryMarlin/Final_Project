@@ -140,6 +140,9 @@
                 } catch (UnsupportedEncodingException e) {e.printStackTrace();}
 
 
+                /**
+                 * This is where we get the inofrmation from webiste, by using an api key and reading json.
+                 */
                 //this goes in the button click handler:
                 JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, stringURL, null,
                         (response) -> {
@@ -156,6 +159,7 @@
                                 int humidity = description.getInt("humidity");
 
                                 WeatherResult results = new WeatherResult(city_name,country_name,time,current,humidity,feelslike, visibility);
+
 
                                 binding.saveButton.setOnClickListener(new View.OnClickListener() {
                                     @Override
@@ -207,6 +211,9 @@
 
             });
 
+            /**
+             * @param dity;
+             */
             class MyRowHolder extends RecyclerView.ViewHolder {
                 public BreakIterator weatherResult;
                 TextView city;
