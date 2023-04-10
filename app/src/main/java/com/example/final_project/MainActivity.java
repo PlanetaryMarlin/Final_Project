@@ -43,6 +43,12 @@ public class MainActivity extends AppCompatActivity {
             startActivity(nextPage);
         });
 
+        Button NewYorkTimesButton = binding.newyorkbutton;
+        NewYorkTimesButton.setOnClickListener(Clk -> {
+            Intent nextPage = new Intent(MainActivity.this,NewYorkTimes.class);
+            startActivity(nextPage);
+        });
+
 
 }
 
