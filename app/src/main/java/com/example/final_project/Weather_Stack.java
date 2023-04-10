@@ -106,11 +106,12 @@ public class Weather_Stack extends AppCompatActivity {
                             String description = position0.getString("description");
                             String iconName = position0.getString("icon");
                             JSONObject mainObject = response.getJSONObject("main");
+                            int id = response.getInt("id");
                             double current = mainObject.getDouble("temp");
                             double min = mainObject.getDouble("temp_min");
                             double max = mainObject.getDouble("temp_max");
                             int humidity = mainObject.getInt("humidity");
-                            WeatherResult result = new WeatherResult(current,min,max,humidity,iconName,description);
+                            WeatherResult result = new WeatherResult(id,current,min,max,humidity,iconName,description);
 
 
                             runOnUiThread(() -> {
