@@ -114,7 +114,11 @@ public class Weather_Stack extends AppCompatActivity {
 
                             WeatherResult results = new WeatherResult(city_name,country_name,time,current,humidity,feelslike, visibility);
 
-                            weatherDAO.insertSave(results);
+
+                            Executor thread = Executors.newSingleThreadExecutor();
+                            thread.execute(() -> {
+                                        weatherDAO.insertSave(results);
+                                    });
 
                             runOnUiThread(() -> {
                                 binding.cityName.setText("City is: " + city_name);
@@ -134,7 +138,6 @@ public class Weather_Stack extends AppCompatActivity {
                                 binding.icon.setImageBitmap(image);
                                 binding.icon.setVisibility(View.VISIBLE);
 
-                                //results.add(result);
 
                             });
 
@@ -149,19 +152,19 @@ public class Weather_Stack extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Receiving Weather Information on: " + cityName, Toast.LENGTH_SHORT).show();
 
         });
-        binding.saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Executor thread = Executors.newSingleThreadExecutor();
-                thread.execute(() -> {
-                WeatherDAO weatherDAO = db.weatherDAO();
-                    weatherDAO.insertSave(results);
-                });
+            binding.saveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Executor thread = Executors.newSingleThreadExecutor();
+                    thread.execute(() -> {
+                    WeatherDAO weatherDAO = db.weatherDAO();
+                        //weatherDAO.insertSave(results);
+                    });
 
-                Toast.makeText(getApplicationContext(), "Result saved.", Toast.LENGTH_SHORT).show();
-            }
+                    Toast.makeText(getApplicationContext(), "Result saved.", Toast.LENGTH_SHORT).show();
+                }
 
-        });
+            });
 
 
 

@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey;
 @Entity
 public class WeatherResult {
 
-    @PrimaryKey (autoGenerate = true)
+    @PrimaryKey (autoGenerate = true) @NonNull
     @ColumnInfo(name = "ID")
     public int id;
     @ColumnInfo(name = "city_name")
