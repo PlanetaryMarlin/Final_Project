@@ -101,7 +101,10 @@ public class Weather_Stack extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         queue = Volley.newRequestQueue(this);
-        binding = ActivityWeatherStackBinding.inflate( getLayoutInflater() );
+        binding = ActivityWeatherStackBinding.inflate( getLayoutInflater());
+        setSupportActionBar(binding.toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         SharedPreferences prefs = getSharedPreferences("Weather_Location", Context.MODE_PRIVATE);
         cityName = prefs.getString("Location", "");
         setContentView(binding.getRoot());
