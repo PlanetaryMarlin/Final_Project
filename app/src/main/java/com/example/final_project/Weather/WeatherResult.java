@@ -39,6 +39,16 @@ public class WeatherResult {
     @Ignore
     protected Bitmap bitmap;
 
+    /**
+     * This class will contain the user search, and place it into the database
+     * @param city_name contains the city name
+     * @param country_name contains the country
+     * @param time contains the time the seach was made
+     * @param temp contains the temperature
+     * @param humidity contains the humidity
+     * @param feelslike contains the what the weather feels like
+     * @param visibility contains the visibility
+     */
     public WeatherResult(String city_name, String country_name, String time, double temp, int humidity, double feelslike, double visibility) {
        // this.id = id;
         this.city_name = city_name;
@@ -51,26 +61,50 @@ public class WeatherResult {
     }
 
 
+    /**
+     *
+     * @return city name
+     */
     public String getCityName() {
         return city_name;
     }
 
+    /**
+     *
+     * @return country name
+     */
     public String getCountryName() {
         return country_name;
     }
 
+    /**
+     *
+     * @return time
+     */
     public String getTime() {
         return time;
     }
 
+    /**
+     *
+     * @return temperature
+     */
     public double getTemp() {
         return temp;
     }
 
+    /**
+     *
+     * @return visibility
+     */
     public double getVis() {
         return visibility;
     }
 
+    /**
+     *
+     * @return feelslike
+     */
     public double getFeel() {
         return feelslike;
     }
