@@ -40,6 +40,9 @@
     import java.io.UnsupportedEncodingException;
     import java.net.URLEncoder;
 
+    import java.text.BreakIterator;
+    import java.util.ArrayList;
+    import java.util.List;
     import java.util.concurrent.Executor;
     import java.util.concurrent.Executors;
 
@@ -158,7 +161,7 @@
                                         thread.execute(() -> {
                                             WeatherDAO weatherDAO = db.weatherDAO();
                                                 weatherDAO.insertSave(results);
-
+                                                
                                         });
 
                                         Toast.makeText(getApplicationContext(), "Result saved.", Toast.LENGTH_SHORT).show();
@@ -202,6 +205,7 @@
             });
 
             class MyRowHolder extends RecyclerView.ViewHolder {
+                public BreakIterator weatherResult;
                 TextView city;
                 public MyRowHolder(@NonNull View itemView) {
                     super(itemView);
@@ -211,11 +215,15 @@
             }
 
 
+
+
             /**
              * Contain RecyclerView
              */
 
             binding.recyclerView.setAdapter(myAdapter = new RecyclerView.Adapter<MyRowHolder>() {
+                private List<WeatherResult> weatherList = new ArrayList<>();
+
                 @NonNull
                 @Override
                 //It represents a single row in the list
@@ -233,8 +241,8 @@
                  */
                 @Override
                 public void onBindViewHolder(@NonNull MyRowHolder holder, int position) {
-                    WeatherResult weather = results;
-                    holder.city.setText("");
+                    WeatherResult weatherResult = weatherList.get(position);
+                    holder.weatherResult.setText("");
                 }
 
                 /**
