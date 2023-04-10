@@ -7,6 +7,8 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -43,34 +45,45 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Max goes here"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="19dp" />
 
     <TextView
         android:id="@+id/minTemp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Min goes here"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="-16dp"
+        tools:layout_editor_absoluteY="38dp" />
 
     <TextView
         android:id="@+id/humidity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Humidity goes here"
-        android:visibility="invisible" />
-
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="130dp"
-        android:layout_height="136dp"
-        android:visibility="invisible" />
-
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="-16dp"
+        tools:layout_editor_absoluteY="57dp" />
     <TextView
         android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Description goes here."
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="-16dp"
+        tools:layout_editor_absoluteY="76dp" />
+
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="123dp"
+            android:layout_height="96dp"
+            android:visibility="invisible"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="95dp" />
+
 
 
 

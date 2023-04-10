@@ -70,6 +70,7 @@ public class Weather_Stack extends AppCompatActivity {
         ActivityWeatherStackBinding binding = ActivityWeatherStackBinding.inflate( getLayoutInflater() );
         setContentView(binding.getRoot());
         binding.getForecast.setOnClickListener(click -> {
+
             cityName = binding.cityTextField.getText().toString();
             String stringURL = null;
             try {
@@ -147,7 +148,15 @@ public class Weather_Stack extends AppCompatActivity {
                     (error) -> {   });
             queue.add(request);
 
+            Toast.makeText(getApplicationContext(), "Receiving Weather Information on: " + cityName, Toast.LENGTH_SHORT).show();
+
+
         });
+
+
+
+
+
 
     }
 
