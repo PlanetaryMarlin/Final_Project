@@ -3,9 +3,9 @@ import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
 /**
- * Database class for MarsFav objects
+ * Database class for Weather Database
  */
-//@Database(entities = {WeatherSave.class}, version = 1)
+@Database(entities = {WeatherResult.class}, version = 1)
 public abstract class Weather_Database extends RoomDatabase {
-    //public abstract WeatherDAO weatherDAODAO();
+    public abstract WeatherDAO weatherDAO();
 }

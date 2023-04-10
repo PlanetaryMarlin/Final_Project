@@ -33,12 +33,26 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.1" />
 
-    <TextView
-        android:id="@+id/temp"
+    <Button
+        android:id="@+id/saveButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Temp goes here"
-        android:visibility="invisible" />
+        android:text="Save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1" />
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Description goes here."
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="-16dp"
+        tools:layout_editor_absoluteY="76dp" />
 
     <TextView
         android:id="@+id/maxTemp"
@@ -48,6 +62,13 @@
         android:visibility="invisible"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="19dp" />
+
+    <TextView
+        android:id="@+id/temp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Temp goes here"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/minTemp"
@@ -66,25 +87,14 @@
         android:visibility="invisible"
         tools:layout_editor_absoluteX="-16dp"
         tools:layout_editor_absoluteY="57dp" />
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Description goes here."
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="123dp"
+        android:layout_height="96dp"
         android:visibility="invisible"
-        tools:layout_editor_absoluteX="-16dp"
-        tools:layout_editor_absoluteY="76dp" />
-
-
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="123dp"
-            android:layout_height="96dp"
-            android:visibility="invisible"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="95dp" />
-
-
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="95dp" />
 
 
 </LinearLayout >

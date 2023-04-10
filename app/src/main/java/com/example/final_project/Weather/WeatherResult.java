@@ -1,14 +1,39 @@
 package com.example.final_project.Weather;
 
+import android.graphics.Bitmap;
+
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class WeatherResult {
 
-
+    @PrimaryKey @NonNull
+    @ColumnInfo(name = "imgID")
+    public int id;
+    @ColumnInfo(name = "current")
     protected double current;
+
+    @ColumnInfo(name = "max")
     protected double max;
+
+    @ColumnInfo(name = "min")
     protected double min;
+
+    @ColumnInfo(name = "humidity")
     protected int humidity;
+
+    @ColumnInfo(name = "description")
     public String description;
+
+    @ColumnInfo(name = "iconName")
     public String iconName;
+
+    @Ignore
+    protected Bitmap bitmap;
 
     public WeatherResult(double current, double max, double min, int humidity, String iconName, String description){
         this.current = current;
@@ -24,6 +49,17 @@ public class WeatherResult {
         return current;
     }
 
+    public double getMax() {
+        return max;
+    }
+
+    public double getMin() {
+        return min;
+    }
+
+    public int getHumidity() {
+        return humidity;
+    }
 
     public String getIconName() {
         return iconName;}
