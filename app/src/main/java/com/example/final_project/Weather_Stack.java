@@ -33,10 +33,6 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-
-import com.example.final_project.Mars.MarsDatabase;
-import com.example.final_project.Mars.MarsFavDAO;
-import com.example.final_project.Mars.MarsResult;
 import com.example.final_project.Weather.WeatherDAO;
 import com.example.final_project.Weather.WeatherResult;
 import com.example.final_project.Weather.Weather_Database;
