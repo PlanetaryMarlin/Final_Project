@@ -28,7 +28,6 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -57,7 +56,7 @@ public class MarsActivity extends AppCompatActivity {
     /** holds arraylist for results of JSON search*/
     private ArrayList<MarsResult> results;
     /** holds arraylist of saved photos*/
-    private ArrayList<MarsFav> favs;
+    private ArrayList<MarsResult> favs;
     /** holds adapter for recycler view*/
     private RecyclerView.Adapter adapter;
     /** holds date input for searching photos*/
@@ -133,7 +132,7 @@ public class MarsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         db = Room.databaseBuilder(getApplicationContext(), MarsDatabase.class, "mars-favs").build();
-        MarsFavDAO mrDAO = db.mrDAO();
+        MarsResultDAO mrDAO = db.mrDAO();
 
         binding = ActivityMarsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -262,7 +261,7 @@ public class MarsActivity extends AppCompatActivity {
             @Override
             public void onBindViewHolder(@NonNull ResultHolder holder, int position) {
                 if (isFavList) {
-                    MarsFav obj = favs.get(position);
+                    MarsResult obj = favs.get(position);
 
                     String dir = getApplicationContext().getFilesDir().getPath();
                     File imgFile = new File(dir, obj.getImgPath());

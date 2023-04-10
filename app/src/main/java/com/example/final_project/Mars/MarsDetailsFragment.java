@@ -24,17 +24,17 @@ import java.util.concurrent.Executors;
  * Class for fragment showing photo details
  */
 public class MarsDetailsFragment extends Fragment {
-    /** marsObj object holding currently selected object*/
-    private MarsObj selected;
+    /** marsResult object holding currently selected object*/
+    private MarsResult selected;
     /** DAO for interacting with database*/
-    private MarsFavDAO mrDAO;
+    private MarsResultDAO mrDAO;
 
     /**
      * Class constructor
-     * @param r MarsObj currently selected
+     * @param r MarsResult currently selected
      * @param db database of saved photos
      */
-    public MarsDetailsFragment(MarsObj r, MarsDatabase db){
+    public MarsDetailsFragment(MarsResult r, MarsDatabase db){
         selected = r;
         mrDAO = db.mrDAO();
     }
@@ -61,7 +61,7 @@ public class MarsDetailsFragment extends Fragment {
         binding.urlFragmentText.setText(selected.getImgSrc());
 
         //Checks if an instance already exists in database
-        List<MarsFav> search = new ArrayList<>();
+        List<MarsResult> search = new ArrayList<>();
         Executor thread = Executors.newSingleThreadExecutor();
         thread.execute(() -> {
             search.addAll(mrDAO.searchByID(selected.getImgID()));
@@ -100,7 +100,7 @@ public class MarsDetailsFragment extends Fragment {
                 throw new RuntimeException(e);
             }
 
-            MarsFav fav = new MarsFav(
+            MarsResult fav = new MarsResult(
                     selected.getImgID(),
                     selected.getImgSrc(),
                     selected.getCamName(),
@@ -119,14 +119,14 @@ public class MarsDetailsFragment extends Fragment {
             binding.delButton.setVisibility(View.INVISIBLE);
             binding.delButton.setEnabled(false);
             thread.execute(() -> {
-                mrDAO.deleteFav((MarsFav) (MarsObj) selected);
+                mrDAO.deleteFav(selected);
             });
 
             //Snackbar after deleting, gives undo option
             Snackbar.make(binding.getRoot(), "Removed from favourites", Snackbar.LENGTH_LONG)
                     .setAction("Undo", snackClk ->{
                         thread.execute(() -> {
-                            mrDAO.insertFav((MarsFav) selected);
+                            mrDAO.insertFav(selected);
                         });
                         binding.saveButton.setVisibility(View.INVISIBLE);
                         binding.saveButton.setEnabled(false);
