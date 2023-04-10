@@ -46,22 +46,23 @@
         app:layout_constraintVertical_bias="0.1" />
 
     <TextView
-        android:id="@+id/description"
+        android:id="@+id/city_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Description goes here."
-        android:visibility="invisible"
-        tools:layout_editor_absoluteX="-16dp"
-        tools:layout_editor_absoluteY="76dp" />
-
-    <TextView
-        android:id="@+id/maxTemp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Max goes here"
+        android:text="City"
         android:visibility="invisible"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="19dp" />
+
+    <TextView
+        android:id="@+id/countryName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Country"
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="19dp" />
+
 
     <TextView
         android:id="@+id/temp"
@@ -71,13 +72,34 @@
         android:visibility="invisible" />
 
     <TextView
-        android:id="@+id/minTemp"
+        android:id="@+id/time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Min goes here"
+        android:text="Timee goes here"
         android:visibility="invisible"
         tools:layout_editor_absoluteX="-16dp"
         tools:layout_editor_absoluteY="38dp" />
+
+
+    <TextView
+        android:id="@+id/visibility"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Visibility"
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="-16dp"
+        tools:layout_editor_absoluteY="38dp" />
+
+
+    <TextView
+        android:id="@+id/feelslike"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Feels"
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="-16dp"
+        tools:layout_editor_absoluteY="38dp" />
+
 
     <TextView
         android:id="@+id/humidity"
