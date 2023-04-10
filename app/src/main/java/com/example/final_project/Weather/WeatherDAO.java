@@ -11,12 +11,24 @@ import java.util.List;
 @Dao
 public interface WeatherDAO {
 
+    /**
+     * Insert into the database
+     * @param weather information
+     */
     @Insert
     void insertSave (WeatherResult weather);
 
+    /**
+     * A query to get all data
+     * @return all items in the database
+     */
     @Query("Select * from WeatherResult")
     List<WeatherResult> getAllWeatherSave();
 
+    /**
+     * Delete data
+     * @param weather
+     */
     @Delete
     void deleteFav(WeatherResult weather);
 }
