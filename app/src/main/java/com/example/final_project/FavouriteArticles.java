@@ -69,32 +69,8 @@ ActivityFavouriteArticlesBinding binding;
 
 
         switch (item.getItemId()) {
+
             case R.id.Item_1:
-
-                Intent intent = new Intent(this, NewYorkTimes.class);
-
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
-                startActivity(intent);
-                this.finish();
-
-
-
-                break;
-
-
-            case R.id.Item_2:
-
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(FavouriteArticles.this);
-                builder.setMessage("").
-                        setTitle("How to use the New York Times App").
-                        setNegativeButton("ok", (dialog, cl) -> {
-                        }).create().show();
-
-
-                break;
-
-            case R.id.Item_3:
 
                 if (articleItems.size() != 0 && IsSelected) {
 
@@ -138,6 +114,20 @@ ActivityFavouriteArticlesBinding binding;
 
 
                 break;
+
+            case R.id.Item_2:
+
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(FavouriteArticles.this);
+                builder.setMessage("").
+                        setTitle("How to use the New York Times App").
+                        setNegativeButton("ok", (dialog, cl) -> {
+                        }).create().show();
+
+
+                break;
+
+
 
         }
         return true;
