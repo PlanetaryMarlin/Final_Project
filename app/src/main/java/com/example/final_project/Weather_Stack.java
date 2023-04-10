@@ -52,7 +52,7 @@
 
         private ArrayList<WeatherResult> results;
 
-        private WeatherView weatherView;
+        private String weatherView;
 
         private RecyclerView.Adapter myAdapter;
         private String cityName;
@@ -125,6 +125,7 @@
 
 
 
+
             binding.getForecast.setOnClickListener(click -> {
                 cityName = binding.cityTextField.getText().toString();
 
@@ -155,7 +156,6 @@
                                 int humidity = description.getInt("humidity");
 
                                 WeatherResult results = new WeatherResult(city_name,country_name,time,current,humidity,feelslike, visibility);
-
 
                                 binding.saveButton.setOnClickListener(new View.OnClickListener() {
                                     @Override
