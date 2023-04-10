@@ -67,6 +67,11 @@
             return true;
         }
 
+        /**
+         *
+         * @param item whcih contain the menu
+         * @return
+         */
         @Override
         public boolean onOptionsItemSelected(@NonNull MenuItem item) {
             super.onOptionsItemSelected(item);
@@ -123,8 +128,9 @@
             Weather_Database db = Room.databaseBuilder(getApplicationContext(), Weather_Database.class, "weather-saves").build();
 
 
-
-
+            /**
+             * The Get FOrecast button which will start the search on the weather site
+             */
 
             binding.getForecast.setOnClickListener(click -> {
                 cityName = binding.cityTextField.getText().toString();
