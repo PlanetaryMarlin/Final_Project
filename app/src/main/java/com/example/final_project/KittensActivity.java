@@ -299,7 +299,7 @@ import java.util.concurrent.Executors;
                 break;
             case R.id.helpItem:
                 AlertDialog.Builder builder = new AlertDialog.Builder(KittensActivity.this);
-                builder.setMessage("In this activity you can search for kittens images in different dimensions and save it if you want!")
+                builder.setMessage("In this activity you can search for kittens images of specified dimensions and save it if you want!")
                         .setPositiveButton("OK", (dialog, cl) -> {})
                         .setTitle("Kittens Help")
                         .create().show();
