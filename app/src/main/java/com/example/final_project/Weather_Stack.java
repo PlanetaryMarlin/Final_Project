@@ -63,7 +63,7 @@
             super.onOptionsItemSelected(item);
             switch (item.getItemId()){
                 case R.id.weatherItem:
-                    Toast menuToast = Toast.makeText(getApplicationContext(), "Already in Mars", Toast.LENGTH_SHORT);
+                    Toast menuToast = Toast.makeText(getApplicationContext(), "Currently In Weather.", Toast.LENGTH_SHORT);
                     menuToast.show();
                     break;
                 case R.id.marsItem:
