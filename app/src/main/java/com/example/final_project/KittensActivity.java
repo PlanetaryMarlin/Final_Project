@@ -242,7 +242,6 @@ import java.util.concurrent.Executors;
         @Override
         protected void onPostExecute(Void unused) {
             super.onPostExecute(unused);
-            // TODO: 3/27/2023 add snakbar
             Toast.makeText(mContext, "Image saved!", Toast.LENGTH_SHORT).show();
             //toast unlike Snackbar can take final
 
@@ -322,3 +321,59 @@ import java.util.concurrent.Executors;
 
 }
 
+//tringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//
+//                        try {
+//                            // remove all dataModels
+//                            dataModels.clear();
+//
+//                            // convert Json to dataModels
+//                            JSONObject jsonObject = new JSONObject(response);
+//                            JSONArray jsonArray = jsonObject.getJSONArray("photos");
+//                            for (int i = 0; i < jsonArray.length(); i++) {
+//                                DataModel model = new DataModel();
+//                                JSONObject object = (JSONObject) jsonArray.get(i);
+//
+//                                model.setId(object.getInt("id"));
+//                                model.setPhotographer(object.getString("photographer"));
+//                                model.setWidth(object.getInt("width"));
+//                                model.setHeight(object.getInt("height"));
+//                                model.setImageUrl(object.getJSONObject("src").getString("original"));
+//                                model.setSmallImageUrl(object.getJSONObject("src").getString("landscape"));
+//
+//                                // add dataModel to DataModel array
+//                                dataModels.add(model);
+//                            }
+//                            // update the listView with new dataModel array
+//                            myAdapter.notifyDataSetChanged();
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                // log for error
+//                Log.d(TAG, "onErrorResponse: " + error);
+//            }
+//
+//        }) {
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                // add Authorization to header of the request
+//                Map<String, String> params = new HashMap<>();
+//                params.put("Authorization", API_KEY);
+//                return params;
+//            }
+//        };
+//
+//
+//        // Add the request to the RequestQueue.
+//        queue.add(stringRequest);
+//    }
