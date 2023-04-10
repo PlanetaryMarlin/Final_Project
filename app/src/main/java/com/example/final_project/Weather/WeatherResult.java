@@ -14,58 +14,65 @@ public class WeatherResult {
     @PrimaryKey @NonNull
     @ColumnInfo(name = "ID")
     public int id;
-    @ColumnInfo(name = "current")
-    protected double current;
+    @ColumnInfo(name = "city_name")
+    protected String city_name;
 
-    @ColumnInfo(name = "max")
-    protected double max;
+    @ColumnInfo(name = "country_name")
+    protected String country_name;
 
-    @ColumnInfo(name = "min")
-    protected double min;
+    @ColumnInfo(name = "time")
+    protected String time;
+
+    @ColumnInfo(name = "temp")
+    protected double temp;
 
     @ColumnInfo(name = "humidity")
     protected int humidity;
 
-    @ColumnInfo(name = "description")
-    public String description;
+    @ColumnInfo(name = "visibility")
+    public double visibility;
 
-    @ColumnInfo(name = "iconName")
-    public String iconName;
+    @ColumnInfo(name = "feelslike")
+    protected double feelslike;
+
 
     @Ignore
     protected Bitmap bitmap;
 
-    public WeatherResult(int id, double current, double max, double min, int humidity, String iconName, String description){
-        this.id = id;
-        this.current = current;
-        this.max = max;
-        this.min = min;
+    public WeatherResult(String city_name, String country_name, String time, double temp, int humidity, double feelslike, double visibility) {
+       // this.id = id;
+        this.city_name = city_name;
+        this.country_name = country_name;
+        this.time = time;
+        this.temp = temp;
         this.humidity = humidity;
-        this.iconName = iconName;
-        this.description = description;
+        this.visibility = visibility;
+        this.feelslike = feelslike;
     }
 
 
-    public double getCurrent() {
-        return current;
+    public String getCityName() {
+        return city_name;
     }
 
-    public double getMax() {
-        return max;
+    public String getCountryName() {
+        return country_name;
     }
 
-    public double getMin() {
-        return min;
+    public String getTime() {
+        return time;
     }
 
-    public int getHumidity() {
-        return humidity;
+    public double getTemp() {
+        return temp;
     }
 
-    public String getIconName() {
-        return iconName;}
+    public double getVis() {
+        return visibility;
+    }
 
-    public String getDescription() {
-        return description;}
+    public double getFeel() {
+        return feelslike;
+    }
 
 }

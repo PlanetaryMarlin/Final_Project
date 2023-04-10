@@ -112,6 +112,9 @@ public class Weather_Stack extends AppCompatActivity {
                             double feelslike = description.getDouble("feelslike");
                             int humidity = description.getInt("humidity");
 
+                            WeatherResult results = new WeatherResult(city_name,country_name,time,current,humidity,feelslike, visibility);
+
+                            weatherDAO.insertSave(results);
 
                             runOnUiThread(() -> {
                                 binding.cityName.setText("City is: " + city_name);
@@ -152,7 +155,6 @@ public class Weather_Stack extends AppCompatActivity {
                 Executor thread = Executors.newSingleThreadExecutor();
                 thread.execute(() -> {
                 WeatherDAO weatherDAO = db.weatherDAO();
-                weatherDAO.insertSave(results);
 
                     weatherDAO.insertSave(results);
                 });
