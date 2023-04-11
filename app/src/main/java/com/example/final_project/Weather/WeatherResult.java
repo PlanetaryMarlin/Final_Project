@@ -10,13 +10,25 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class WeatherResult {
-
+    /**
+     * The Primary Key of the Database
+     * Auto generated
+     */
     @PrimaryKey (autoGenerate = true) @NonNull
     @ColumnInfo(name = "ID")
     public int id;
+
+    /**
+     * City name from the search
+     * A column in the table
+     */
     @ColumnInfo(name = "city_name")
     protected String city_name;
 
+    /**
+     * Country name from the search
+     * A column in the table
+     */
     @ColumnInfo(name = "country_name")
     protected String country_name;
 

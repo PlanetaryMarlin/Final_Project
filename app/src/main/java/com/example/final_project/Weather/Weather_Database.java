@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 @Database(entities = {WeatherResult.class}, version = 1)
 public abstract class Weather_Database extends RoomDatabase {
     /**
-     * An abstact method that will be used to contrain the weatherDAO
+     * An abstact method that will be used to contains the weatherDAO
      * @return weatherDAO
      */
     public abstract WeatherDAO weatherDAO();

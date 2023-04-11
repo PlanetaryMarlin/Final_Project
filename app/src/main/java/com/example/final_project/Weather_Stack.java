@@ -30,7 +30,6 @@
     import com.example.final_project.Weather.WeatherView;
     import com.example.final_project.Weather.Weather_Database;
     import com.example.final_project.databinding.ActivityWeatherStackBinding;
-    import com.example.final_project.databinding.MarsResultBinding;
     import com.example.final_project.databinding.WeatherLocationResultsBinding;
     import com.google.android.material.snackbar.Snackbar;
 
