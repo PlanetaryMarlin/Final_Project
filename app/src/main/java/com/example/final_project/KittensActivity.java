@@ -41,7 +41,7 @@ import java.util.concurrent.Executors;
 
 /**
  * Page for downloading Kittens image from URL using Volley
- *
+ * @author
  */
 
  public class KittensActivity extends AppCompatActivity {
