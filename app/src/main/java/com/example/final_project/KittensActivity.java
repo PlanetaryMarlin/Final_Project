@@ -2,37 +2,31 @@ package com.example.final_project;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.final_project.databinding.ActivityGalleryBinding;
 import com.example.final_project.databinding.ActivityKittensBinding;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.final_project.databinding.KittensResultBinding;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -53,22 +47,24 @@ import java.util.concurrent.Executors;
     //SharedPreferences is telling the application that this is default and to save it, such that it's there you open it again
     Button button;
     ProgressDialog ProgressDialog;
-    ActivityKittensBinding bind;
+    ActivityKittensBinding binding;
 
     KittensEntity entity=new KittensEntity();
 
     private KittensDAO mDAO;
+    private Bitmap bitmap;
     private static final String SHARED_PREF_NAME = "MyData";
     private static final String KEY_HEIGHT = "height";
     private static final String KEY_WIDTH = "width";
+    private RecyclerView.Adapter adapter;
 
     //these are private final because they can only be accessed by this class and won't change
     //The binding class name is Activity + Classname, the main classname here would need Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        bind = ActivityKittensBinding.inflate(getLayoutInflater());
-        setContentView(bind.getRoot());
+        binding = ActivityKittensBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         //need these two lines whenever we use binding
         //image = findViewById(R.id.imageView);
 //        EditText heightEditText= findViewById(R.id.heightEditText);
@@ -81,18 +77,19 @@ import java.util.concurrent.Executors;
 
         String width = prefs.getString(KEY_WIDTH, null);
         String height = prefs.getString(KEY_HEIGHT, null);
-        bind.widthEditText.setText(width); // using String variable name
-        bind.heightEditText.setText(height);
+        binding.widthEditText.setText(width); // using String variable name
+        binding.heightEditText.setText(height);
         //reading data from sharedpref and putting it into the edittext
 
-        setSupportActionBar(bind.toolbar);
+        setSupportActionBar(binding.toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        RequestQueue queue = Volley.newRequestQueue(this);
 
-        bind.downloadImage.setOnClickListener(clk -> {
-            widthInput = bind.widthEditText.getText().toString();
+        binding.downloadImage.setOnClickListener(clk -> {
+            widthInput = binding.widthEditText.getText().toString();
             //storing the content of the component
             //getText gets the text from input, toString converts text to String
-            heightInput = bind.heightEditText.getText().toString();
+            heightInput = binding.heightEditText.getText().toString();
             SharedPreferences.Editor editor = prefs.edit();
             //declaring our editor
             //the editor edits the shared preferencces
@@ -106,19 +103,30 @@ import java.util.concurrent.Executors;
             editor.apply();
             //need to call apply to save putString
             urlKitten = String.format("https://placekitten.com/%s/%s", widthInput, heightInput);
+            ImageRequest imgReq = new ImageRequest(urlKitten, new Response.Listener<Bitmap>() {
+                @Override
+                public void onResponse(Bitmap mybitmap) {
+                    bitmap = mybitmap;
+
+                }
+            }, 1024, 1024, ImageView.ScaleType.CENTER, null,
+                    error  -> {
+                    });
+            queue.add(imgReq);
+            binding.imageView.setImageBitmap(bitmap);
 
             //inside prefs look for variable KEY_LOGIN which holds string value "email" in our case
             //value of variable email, which is the email that user inputted and storing it in email
-            new DownloadImage().execute(urlKitten);
+            //new DownloadImage().execute(urlKitten);
             Toast.makeText(getApplicationContext(), "The width = " + widthInput + " and height = " + heightInput + " .", Toast.LENGTH_LONG).show();
 
 
         });
-        bind.saveFavourites.setOnClickListener(clk -> {
+        binding.saveFavourites.setOnClickListener(clk -> {
 
-            widthInput = bind.widthEditText.getText().toString();
+            widthInput = binding.widthEditText.getText().toString();
             //storing the content of the component
-            heightInput = bind.heightEditText.getText().toString();
+            heightInput = binding.heightEditText.getText().toString();
             urlKitten = String.format("https://placekitten.com/%s/%s", widthInput, heightInput);
 
 
@@ -135,7 +143,7 @@ import java.util.concurrent.Executors;
 
 
                             // Save Image to local storage
-                            new SaveImageLocalStorage(getApplicationContext()).execute(entity);
+                            //new SaveImageLocalStorage(getApplicationContext()).execute(entity);
 
                         }
                     })
@@ -145,6 +153,25 @@ import java.util.concurrent.Executors;
 
 
         });
+        ActivityGalleryBinding gallerybinding;
+
+        gallerybinding = ActivityGalleryBinding.inflate(getLayoutInflater());
+
+        gallerybinding.recyclerview.setAdapter(adapter = new RecyclerView.Adapter<GalleryActivity.ResultHolder>() {
+
+            /**
+             * onCreateViewHolder method for ResultHolder class
+             * @param parent   The ViewGroup into which the new View will be added after it is bound to
+             *                 an adapter position.
+             * @param viewType The view type of the new View.
+             * @return ResultHolder class
+             */
+            @NonNull
+            @Override
+            public GalleryActivity.ResultHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                KittensResultBinding binding = KittensResultBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+                return new ResultHolder(binding.getRoot());
+            }
     }
 
     private void saveToDatabase() {
@@ -175,113 +202,116 @@ import java.util.concurrent.Executors;
         return dateFormat.format(date);
     }
 
-    private class DownloadImage extends AsyncTask<String, Void ,Bitmap> {
-        //have to pass 3 parameters to async task
-        //String is url input
-        //Bitmap is output
-        @Override
-        protected Bitmap doInBackground(String... strings) {
-            String imageURL = strings[0];
-            Bitmap bitmap = null;
-            try {
-                // Download Image from URL
-                InputStream input = new java.net.URL(imageURL).openStream();
-                // Decode Bitmap
-                bitmap = BitmapFactory.decodeStream(input);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return bitmap;
-        }
 
 
 
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            //the next phase of the download, whatever you want to do with the data
-            //Async task under the hood will pass bitmap to onPostExecute without us asking
-            super.onPostExecute(bitmap);
-            // Set the bitmap into ImageView
-            bind.imageView.setImageBitmap(bitmap);
-            //sets the imageview
-        }
+//    private class DownloadImage extends AsyncTask<String, Void ,Bitmap> {
+//        //have to pass 3 parameters to async task
+//        //String is url input
+//        //Bitmap is output
+//        @Override
+//        protected Bitmap doInBackground(String... strings) {
+//            String imageURL = strings[0];
+//            Bitmap bitmap = null;
+//            try {
+//                // Download Image from URL
+//                InputStream input = new java.net.URL(imageURL).openStream();
+//                // Decode Bitmap
+//                bitmap = BitmapFactory.decodeStream(input);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            return bitmap;
+//        }
+//
+//
+//
+//        @Override
+//        protected void onPostExecute(Bitmap bitmap) {
+//            //the next phase of the download, whatever you want to do with the data
+//            //Async task under the hood will pass bitmap to onPostExecute without us asking
+//            super.onPostExecute(bitmap);
+//            // Set the bitmap into ImageView
+//            binding.imageView.setImageBitmap(bitmap);
+//            //sets the imageview
+//        }
+//
+//
+//    }
+//
+//
+//
+//
+//
+//
+//    class SaveImageLocalStorage extends AsyncTask<KittensEntity, Void, Void> {
+//        //doesn't have access to import because nested
+//        private final Context mContext;
+//        //have to make context final because nested
+//
+//        public SaveImageLocalStorage(final Context context)
+//        {
+//            mContext = context;
+//        }
+//
+//        protected Void doInBackground(KittensEntity... kittensEntities) {
+//            try {
+//
+//                // download image
+//                URL url = new URL(kittensEntities[0].imageUrl);
+//                Bitmap bitmapImage= BitmapFactory.decodeStream(url.openConnection().getInputStream());
+//
+//                saveToInternalStorage(bitmapImage,kittensEntities[0]);
+//
+//            } catch (Exception e) {
+//                return null;
+//            }
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void unused) {
+//            super.onPostExecute(unused);
+//            Toast.makeText(mContext, "Image saved!", Toast.LENGTH_SHORT).show();
+//            //toast unlike Snackbar can take final
+//
+//            View parentLayout=findViewById(android.R.id.content);
+//            //parentLayout is the parent layout of all activity in this application
+//            //can't pass the context because final so must pass parentLayout
+//            Snackbar.make(parentLayout,"Image saved!",Snackbar.LENGTH_LONG)
+//                    .setAction("DISMISS", new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//
+//                        }
+//                    })
+//                    .show();
+//        }
 
+//        private void saveToInternalStorage(Bitmap bitmapImage, KittensEntity model) {
+//
+//            ContextWrapper cw = new ContextWrapper(mContext);
+//            // path to /data/data/yourapp/app_data/imageDir
+//            File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+//            // Create imageDir
+//            File mypath = new File(directory, model.id + ".jpg");
+//
+//            FileOutputStream fos = null;
+//            try {
+//                fos = new FileOutputStream(mypath);
+//                // Use the compress method on the BitMap object to write image to the OutputStream
+//                bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            } finally {
+//                try {
+//                    fos.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
 
-    }
-
-
-
-
-
-
-    class SaveImageLocalStorage extends AsyncTask<KittensEntity, Void, Void> {
-        //doesn't have access to import because nested
-        private final Context mContext;
-        //have to make context final because nested
-
-        public SaveImageLocalStorage(final Context context)
-        {
-            mContext = context;
-        }
-
-        protected Void doInBackground(KittensEntity... kittensEntities) {
-            try {
-
-                // download image
-                URL url = new URL(kittensEntities[0].imageUrl);
-                Bitmap bitmapImage= BitmapFactory.decodeStream(url.openConnection().getInputStream());
-
-                saveToInternalStorage(bitmapImage,kittensEntities[0]);
-
-            } catch (Exception e) {
-                return null;
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void unused) {
-            super.onPostExecute(unused);
-            Toast.makeText(mContext, "Image saved!", Toast.LENGTH_SHORT).show();
-            //toast unlike Snackbar can take final
-
-            View parentLayout=findViewById(android.R.id.content);
-            //parentLayout is the parent layout of all activity in this application
-            //can't pass the context because final so must pass parentLayout
-            Snackbar.make(parentLayout,"Image saved!",Snackbar.LENGTH_LONG)
-                    .setAction("DISMISS", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                        }
-                    })
-                    .show();
-        }
-
-        private void saveToInternalStorage(Bitmap bitmapImage, KittensEntity model) {
-
-            ContextWrapper cw = new ContextWrapper(mContext);
-            // path to /data/data/yourapp/app_data/imageDir
-            File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-            // Create imageDir
-            File mypath = new File(directory, model.id + ".jpg");
-
-            FileOutputStream fos = null;
-            try {
-                fos = new FileOutputStream(mypath);
-                // Use the compress method on the BitMap object to write image to the OutputStream
-                bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
 
     /**
      * Menu for KittensActivity
@@ -319,7 +349,8 @@ import java.util.concurrent.Executors;
         return true;
     }
 
-}
+
+
 
 //tringRequest stringRequest = new StringRequest(Request.Method.GET, url,
 //                new Response.Listener<String>() {
@@ -376,4 +407,17 @@ import java.util.concurrent.Executors;
 //
 //        // Add the request to the RequestQueue.
 //        queue.add(stringRequest);
-//    }
+ //}
+}
+    /**
+     * ResultHolder class extending ViewHolder for recycler view
+     */
+    class ResultHolder extends RecyclerView.ViewHolder {
+
+        /** ImageView for holding photo taken*/
+        ImageView imageView;
+        public ResultHolder(View itemView){
+            super(itemView);
+            imageView = itemView.findViewById(R.id.kittensImage);
+
+    }
