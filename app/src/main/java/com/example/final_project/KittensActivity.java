@@ -7,14 +7,15 @@ import androidx.room.Room;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -25,8 +26,10 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.final_project.databinding.ActivityGalleryBinding;
 import com.example.final_project.databinding.ActivityKittensBinding;
-import com.example.final_project.databinding.KittensResultBinding;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,6 +42,7 @@ import java.util.concurrent.Executors;
  */
 
  public class KittensActivity extends AppCompatActivity {
+    public static final String IMAGE_DIR = "imageDir";
     String widthInput;
     String heightInput;
     String urlKitten = String.format("https://placekitten.com/%s/%s", widthInput, heightInput);
@@ -49,7 +53,7 @@ import java.util.concurrent.Executors;
     ProgressDialog ProgressDialog;
     ActivityKittensBinding binding;
 
-    KittensEntity entity=new KittensEntity();
+    KittensEntity entity = new KittensEntity();
 
     private KittensDAO mDAO;
     private Bitmap bitmap;
@@ -57,6 +61,10 @@ import java.util.concurrent.Executors;
     private static final String KEY_HEIGHT = "height";
     private static final String KEY_WIDTH = "width";
     private RecyclerView.Adapter adapter;
+
+    public static final String DATABASE_NAME = "application-database";
+    private long insertedEntityId;
+    //database name when we use ROOM database
 
     //these are private final because they can only be accessed by this class and won't change
     //The binding class name is Activity + Classname, the main classname here would need Activity
@@ -107,13 +115,13 @@ import java.util.concurrent.Executors;
                 @Override
                 public void onResponse(Bitmap mybitmap) {
                     bitmap = mybitmap;
+                    binding.imageView.setImageBitmap(bitmap);
 
                 }
             }, 1024, 1024, ImageView.ScaleType.CENTER, null,
-                    error  -> {
+                    error -> {
                     });
             queue.add(imgReq);
-            binding.imageView.setImageBitmap(bitmap);
 
             //inside prefs look for variable KEY_LOGIN which holds string value "email" in our case
             //value of variable email, which is the email that user inputted and storing it in email
@@ -144,12 +152,11 @@ import java.util.concurrent.Executors;
 
                             // Save Image to local storage
                             //new SaveImageLocalStorage(getApplicationContext()).execute(entity);
-
+                            saveToInternalStorage(bitmap, entity);
                         }
                     })
                     .setNegativeButton("No", null)
                     .show();
-
 
 
         });
@@ -157,27 +164,40 @@ import java.util.concurrent.Executors;
 
         gallerybinding = ActivityGalleryBinding.inflate(getLayoutInflater());
 
-        gallerybinding.recyclerview.setAdapter(adapter = new RecyclerView.Adapter<GalleryActivity.ResultHolder>() {
-
-            /**
-             * onCreateViewHolder method for ResultHolder class
-             * @param parent   The ViewGroup into which the new View will be added after it is bound to
-             *                 an adapter position.
-             * @param viewType The view type of the new View.
-             * @return ResultHolder class
-             */
-            @NonNull
-            @Override
-            public GalleryActivity.ResultHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                KittensResultBinding binding = KittensResultBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-                return new ResultHolder(binding.getRoot());
-            }
+//        gallerybinding.recyclerview.setAdapter(adapter = new RecyclerView.Adapter<GalleryActivity.ResultHolder>() {
+//
+//            /**
+//             * onCreateViewHolder method for ResultHolder class
+//             *
+//             * @param parent   The ViewGroup into which the new View will be added after it is bound to
+//             *                 an adapter position.
+//             * @param viewType The view type of the new View.
+//             * @return ResultHolder class
+//             */
+//            @NonNull
+//            @Override
+//            public GalleryActivity.ResultHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+//                KittensResultBinding binding = KittensResultBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+//                return new ResultHolder(binding.getRoot());
+//            }
+//
+//            @Override
+//            public void onBindViewHolder(@NonNull GalleryActivity.ResultHolder holder, int position) {
+//
+//            }
+//
+//            @Override
+//            public int getItemCount() {
+//                return 0;
+//            }
+//        });
     }
 
     private void saveToDatabase() {
+        //when we open ROOM database, we need to give it a name
 
         // Open Database
-        MyDatabase db = Room.databaseBuilder(getApplicationContext(), MyDatabase.class, "database-name").build();
+        MyDatabase db = Room.databaseBuilder(getApplicationContext(), MyDatabase.class, DATABASE_NAME).build();
         //create database instance, db is object of message database
         mDAO = db.cmDAO();
         //use mDAO to insert
@@ -187,143 +207,58 @@ import java.util.concurrent.Executors;
         thread.execute(() -> {
             //entity is object of KittensEntity and height,width etc are attributes
             //taking inputs and saving in entity object
-            entity.height=heightInput;
-            entity.width=widthInput;
-            entity.timeSaved=getDateTime();
-            entity.imageUrl=urlKitten;
-            mDAO.insertMessage(entity);
+            entity.height = heightInput;
+            entity.width = widthInput;
+            entity.timeSaved = getDateTime();
+            entity.imageUrl = urlKitten;
+            insertedEntityId = mDAO.insertKitten(entity);
         });
 
     }
 
-    private String getDateTime(){
-        DateFormat dateFormat=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date=new Date();
+    private String getDateTime() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
         return dateFormat.format(date);
     }
 
 
+    private void saveToInternalStorage(Bitmap bitmapImage, KittensEntity model) {
 
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir(IMAGE_DIR, Context.MODE_PRIVATE);
+        // Create imageDir
+        File mypath = new File(directory, insertedEntityId + ".jpg");
 
-//    private class DownloadImage extends AsyncTask<String, Void ,Bitmap> {
-//        //have to pass 3 parameters to async task
-//        //String is url input
-//        //Bitmap is output
-//        @Override
-//        protected Bitmap doInBackground(String... strings) {
-//            String imageURL = strings[0];
-//            Bitmap bitmap = null;
-//            try {
-//                // Download Image from URL
-//                InputStream input = new java.net.URL(imageURL).openStream();
-//                // Decode Bitmap
-//                bitmap = BitmapFactory.decodeStream(input);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            return bitmap;
-//        }
-//
-//
-//
-//        @Override
-//        protected void onPostExecute(Bitmap bitmap) {
-//            //the next phase of the download, whatever you want to do with the data
-//            //Async task under the hood will pass bitmap to onPostExecute without us asking
-//            super.onPostExecute(bitmap);
-//            // Set the bitmap into ImageView
-//            binding.imageView.setImageBitmap(bitmap);
-//            //sets the imageview
-//        }
-//
-//
-//    }
-//
-//
-//
-//
-//
-//
-//    class SaveImageLocalStorage extends AsyncTask<KittensEntity, Void, Void> {
-//        //doesn't have access to import because nested
-//        private final Context mContext;
-//        //have to make context final because nested
-//
-//        public SaveImageLocalStorage(final Context context)
-//        {
-//            mContext = context;
-//        }
-//
-//        protected Void doInBackground(KittensEntity... kittensEntities) {
-//            try {
-//
-//                // download image
-//                URL url = new URL(kittensEntities[0].imageUrl);
-//                Bitmap bitmapImage= BitmapFactory.decodeStream(url.openConnection().getInputStream());
-//
-//                saveToInternalStorage(bitmapImage,kittensEntities[0]);
-//
-//            } catch (Exception e) {
-//                return null;
-//            }
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Void unused) {
-//            super.onPostExecute(unused);
-//            Toast.makeText(mContext, "Image saved!", Toast.LENGTH_SHORT).show();
-//            //toast unlike Snackbar can take final
-//
-//            View parentLayout=findViewById(android.R.id.content);
-//            //parentLayout is the parent layout of all activity in this application
-//            //can't pass the context because final so must pass parentLayout
-//            Snackbar.make(parentLayout,"Image saved!",Snackbar.LENGTH_LONG)
-//                    .setAction("DISMISS", new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//
-//                        }
-//                    })
-//                    .show();
-//        }
-
-//        private void saveToInternalStorage(Bitmap bitmapImage, KittensEntity model) {
-//
-//            ContextWrapper cw = new ContextWrapper(mContext);
-//            // path to /data/data/yourapp/app_data/imageDir
-//            File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-//            // Create imageDir
-//            File mypath = new File(directory, model.id + ".jpg");
-//
-//            FileOutputStream fos = null;
-//            try {
-//                fos = new FileOutputStream(mypath);
-//                // Use the compress method on the BitMap object to write image to the OutputStream
-//                bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            } finally {
-//                try {
-//                    fos.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 
     /**
      * Menu for KittensActivity
-     * @param item The menu item that was selected.
      *
+     * @param item The menu item that was selected.
      * @return
      */
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.kittensItem:
                 Toast menuToast = Toast.makeText(getApplicationContext(), "Already in Kittens activity!", Toast.LENGTH_SHORT);
                 menuToast.show();
@@ -335,7 +270,8 @@ import java.util.concurrent.Executors;
             case R.id.helpItem:
                 AlertDialog.Builder builder = new AlertDialog.Builder(KittensActivity.this);
                 builder.setMessage("In this activity you can search for kittens images of specified dimensions and save it if you want!")
-                        .setPositiveButton("OK", (dialog, cl) -> {})
+                        .setPositiveButton("OK", (dialog, cl) -> {
+                        })
                         .setTitle("Kittens Help")
                         .create().show();
         }
@@ -348,76 +284,7 @@ import java.util.concurrent.Executors;
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
-
-
-
-
-//tringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//
-//                        try {
-//                            // remove all dataModels
-//                            dataModels.clear();
-//
-//                            // convert Json to dataModels
-//                            JSONObject jsonObject = new JSONObject(response);
-//                            JSONArray jsonArray = jsonObject.getJSONArray("photos");
-//                            for (int i = 0; i < jsonArray.length(); i++) {
-//                                DataModel model = new DataModel();
-//                                JSONObject object = (JSONObject) jsonArray.get(i);
-//
-//                                model.setId(object.getInt("id"));
-//                                model.setPhotographer(object.getString("photographer"));
-//                                model.setWidth(object.getInt("width"));
-//                                model.setHeight(object.getInt("height"));
-//                                model.setImageUrl(object.getJSONObject("src").getString("original"));
-//                                model.setSmallImageUrl(object.getJSONObject("src").getString("landscape"));
-//
-//                                // add dataModel to DataModel array
-//                                dataModels.add(model);
-//                            }
-//                            // update the listView with new dataModel array
-//                            myAdapter.notifyDataSetChanged();
-//
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//
-//
-//                    }
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                // log for error
-//                Log.d(TAG, "onErrorResponse: " + error);
-//            }
-//
-//        }) {
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                // add Authorization to header of the request
-//                Map<String, String> params = new HashMap<>();
-//                params.put("Authorization", API_KEY);
-//                return params;
-//            }
-//        };
-//
-//
-//        // Add the request to the RequestQueue.
-//        queue.add(stringRequest);
- //}
 }
-    /**
-     * ResultHolder class extending ViewHolder for recycler view
-     */
-    class ResultHolder extends RecyclerView.ViewHolder {
 
-        /** ImageView for holding photo taken*/
-        ImageView imageView;
-        public ResultHolder(View itemView){
-            super(itemView);
-            imageView = itemView.findViewById(R.id.kittensImage);
 
-    }
+

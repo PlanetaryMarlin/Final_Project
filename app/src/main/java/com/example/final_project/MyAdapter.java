@@ -40,7 +40,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            titleTextView=itemView.findViewById(R.id.titleTv);
+            titleTextView=itemView.findViewById(R.id.rowHolderText);
             deleteButton=itemView.findViewById(R.id.deleteBtn);
 
             deleteButton.setOnClickListener(this);

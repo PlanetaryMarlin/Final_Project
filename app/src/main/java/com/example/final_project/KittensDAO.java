@@ -15,11 +15,11 @@ import java.util.List;
 public interface KittensDAO {
     @Insert
         //ChatMessage is a database row, the @Insert does the insert operation
-    void insertMessage(KittensEntity m);
+    long insertKitten(KittensEntity m);
     //@Query is whenever you want to make a SQL query
     @Query("Select * from KittensEntity")
     List<KittensEntity> getAllKittens();
 
     @Delete
-    void deleteMessage(KittensEntity m);
+    void deleteKitten(KittensEntity m);
 }
