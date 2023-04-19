@@ -128,12 +128,13 @@
 
 
             /**
-             * The Get FOrecast button which will start the search on the weather site
+             * The Get Forecast button which will start the search on the weather site
              */
 
             binding.getForecast.setOnClickListener(click -> {
                 cityName = binding.cityTextField.getText().toString();
-
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("Location" , cityName).apply();
                 String stringURL = null;
 
                 try {
